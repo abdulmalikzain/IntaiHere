@@ -2,6 +2,7 @@ package com.intaihere.malikabdul.intaihere.utils;
 
 public class Server {
     public static final String URL = "http://trackingeye.000webhostapp.com/trackingeye/";
+    public static final String URL_DETAIL_GRUP = "http://trackingeye.000webhostapp.com/trackingeye/getDetailUser.php";
     public static final String URL_DATA_BY = "http://trackingeye.000webhostapp.com/trackingeye/view_data.php?id=";
 
     public static final String URL_UBAH_DATA = "http://trackingeye.000webhostapp.com/trackingeye/ubahdata_profile.php";

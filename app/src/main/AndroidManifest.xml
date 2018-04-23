@@ -41,7 +41,8 @@
         <activity android:name=".logReg.LoginActivity" />
         <activity android:name=".logReg.RegisterActivity" />
         <activity android:name=".menuStatus.DetailStatusActivity" />
-        <activity android:name=".menuStatus.InputStatusActivity"></activity>
+        <activity android:name=".menuStatus.InputStatusActivity" />
+        <activity android:name=".menuGrup.DetailAnggotaActivity"></activity>
     </application>
 
 </manifest>

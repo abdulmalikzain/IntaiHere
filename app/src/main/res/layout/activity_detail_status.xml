@@ -1,9 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBlack"
     tools:context=".menuStatus.DetailStatusActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/iv_status_detailgambar"
+        android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:layout_height="match_parent"
+        android:layout_margin="-10dp"/>
+    <RelativeLayout
+        android:id="@+id/relbar_datilstatus"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/iv_status_detailgambar"
+        android:layout_alignParentTop="true"
+        android:padding="5dp">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff">
+
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tabsdetailstatus"
+                android:theme="@style/ToolBarStyle">
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_status_detailfotouser"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:civ_border_color="@color/colorWhite"
+            app:civ_border_width="1dp"
+            android:layout_marginLeft="50dp"
+            android:src="@drawable/man"/>
+        <TextView
+            android:id="@+id/tv_status_detUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="8pt"
+            android:textColor="#fff"
+            android:layout_marginLeft="100dp"/>
+
+        <TextView
+            android:id="@+id/tv_status_detWaktu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Waktu"
+            android:layout_marginLeft="100dp"
+            android:textSize="6pt"
+            android:textColor="#fff"
+            android:layout_below="@id/tv_status_detUsername"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_place"
+        android:backgroundTint="@color/colorWhite"
+        android:layout_below="@id/relbar_datilstatus"/>
+    <TextView
+        android:id="@+id/tv_status_detTujuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tujuan"
+        android:textColor="@color/colorWhite"
+        android:layout_marginLeft="30dp"
+        android:layout_below="@id/relbar_datilstatus"
+        android:background="#3d000000"/>
+    <TextView
+        android:id="@+id/tv_status_detStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="status"
+        android:textAlignment="center"
+        android:background="#22ffffff"
+        android:layout_marginTop="400dp"
+        android:textColor="@color/colorWhite"
+        android:layout_below="@id/tv_status_detTujuan"/>
+
+</RelativeLayout>
