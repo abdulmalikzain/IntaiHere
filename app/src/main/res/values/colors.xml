@@ -6,4 +6,5 @@
     <color name="colorToska">#2ED1A2</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorGrey">#cccccc</color>
 </resources>

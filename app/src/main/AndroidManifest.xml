@@ -42,7 +42,11 @@
         <activity android:name=".logReg.RegisterActivity" />
         <activity android:name=".menuStatus.DetailStatusActivity" />
         <activity android:name=".menuStatus.InputStatusActivity" />
-        <activity android:name=".menuGrup.DetailAnggotaActivity"></activity>
+        <activity android:name=".menuGrup.DetailAnggotaActivity" />
+        <activity android:name=".menuSetting.ProfilActivity" />
+        <activity android:name=".menuSetting.UbahProfilActivity">
+
+        </activity>
     </application>
 
 </manifest>

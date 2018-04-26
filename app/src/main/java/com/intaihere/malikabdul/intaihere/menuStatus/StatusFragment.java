@@ -187,6 +187,7 @@ public class StatusFragment extends Fragment {
             }
 
             final ModelStatus modelTask = new ModelStatus();
+            modelTask.setWaktu(convTime);
             modelTask.setUsername(Nama);
             modelTask.setGambar(image);
             modelTask.setStatus(status);

@@ -31,7 +31,8 @@ public class DetailAnggotaActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView thumb_image;
     private TextView email, telephone, alamat;
-    private String title, id_news;
+    private String titleNama, id_news;
+    private CollapsingToolbarLayout collapsingToolbar;
     private static final String TAG = DetailAnggotaActivity.class.getSimpleName();
 
 
@@ -40,7 +41,7 @@ public class DetailAnggotaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_anggota);
 
-        toolbar     = findViewById(R.id.toolbar);
+        toolbar     = findViewById(R.id.toolbar_detailanggota);
         thumb_image = findViewById(R.id.backdrop);
         email       = findViewById(R.id.tv_emailDG);
         telephone   = findViewById(R.id.tv_telephoneDG);
@@ -49,10 +50,12 @@ public class DetailAnggotaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(title);
 
         id_news = getIntent().getStringExtra("id");
+        Log.d(TAG, "ssssss: "+titleNama);
+
+        collapsingToolbar = findViewById(R.id.collapsing_toolbar);
+
 
         callDetailAnggota(id_news);
     }
@@ -77,12 +80,13 @@ public class DetailAnggotaActivity extends AppCompatActivity {
                 try {
                     JSONObject obj = new JSONObject(response);
 
-                    title              = obj.getString("username");
+                    titleNama           = obj.getString("username");
                     String Gambar      = obj.getString("image");
                     String Email       = obj.getString("email");
                     String Telephone   = obj.getString("telephone");
                     String Alamat      = obj.getString("alamat");
 
+                    collapsingToolbar.setTitle(titleNama);
                     email.setText(Email);
                     alamat.setText(Alamat);
                     telephone.setText(Telephone);

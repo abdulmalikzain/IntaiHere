@@ -13,7 +13,7 @@
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite">
+            android:background="@drawable/white_toska_borderbottom">
 
         </android.support.v7.widget.Toolbar>
 
@@ -47,7 +47,6 @@
             android:layout_height="20dp"
             android:layout_marginLeft="-18dp"
             android:layout_gravity="bottom"
-            android:background="@color/colorWhite"
             android:src="@drawable/circle_add"/>
         <LinearLayout
             android:layout_width="wrap_content"

@@ -1,6 +1,5 @@
 package com.intaihere.malikabdul.intaihere.menuGrup;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,13 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toolbar;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -58,7 +55,6 @@ public class GrupFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public static final String TAG_TELEPHONE      = "telephone";
     public static final String TAG_GAMBAR   = "image";
     public static final String TAG_ALAMAT   = "alamat";
-    private Toolbar mActionToolbar;
 
     private Handler handler;
     private Runnable runnable;
@@ -72,6 +68,7 @@ public class GrupFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         swipe = view.findViewById(R.id.swipe_refresh_anggota);
         list = view.findViewById(R.id.list_view_anggota);
         anggotaList.clear();
+
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -88,7 +85,7 @@ public class GrupFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         anggotaAdapter= new AnggotaAdapter(getActivity(), anggotaList);
         list.setAdapter(anggotaAdapter);
 
-        swipe.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) getContext());
+        swipe.setOnRefreshListener(this);
 
         swipe.post(new Runnable() {
                        @Override

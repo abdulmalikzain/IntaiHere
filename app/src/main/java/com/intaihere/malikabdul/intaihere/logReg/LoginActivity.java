@@ -78,11 +78,11 @@ public class LoginActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
         session = sharedpreferences.getBoolean(session_status, false);
         id = sharedpreferences.getString(TAG_ID, null);
-        email = sharedpreferences.getString(TAG_EMAIL, null);
+//        email = sharedpreferences.getString(TAG_EMAIL, null);
         username = sharedpreferences.getString(TAG_USERNAME, null);
-        alamat = sharedpreferences.getString("alamat", null);
-        telephone = sharedpreferences.getString("telp", null);
-        image = sharedpreferences.getString("image", null);
+//        alamat = sharedpreferences.getString("alamat", null);
+//        telephone = sharedpreferences.getString("telp", null);
+//        image = sharedpreferences.getString("image", null);
 
         if (session) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -151,12 +151,12 @@ public class LoginActivity extends AppCompatActivity {
 
                     // Check for error node in json
                     if (success == 1) {
-                        String email = jObj.getString(TAG_EMAIL);
+//                        String email = jObj.getString(TAG_EMAIL);
                         String id = jObj.getString(TAG_ID);
                         String username = jObj.getString(TAG_USERNAME);
-                        String alamat= jObj.getString("alamat");
-                        String telephone= jObj.getString("telephone");
-                        String image= jObj.getString("image");
+//                        String alamat= jObj.getString("alamat");
+//                        String telephone= jObj.getString("telephone");
+//                        String image= jObj.getString("image");
 
                         Log.e("Login Berhasil!", jObj.toString());
 
@@ -166,11 +166,11 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedpreferences.edit();
                         editor.putBoolean(session_status, true);
                         editor.putString(TAG_ID, id);
-                        editor.putString(TAG_EMAIL, email);
+//                        editor.putString(TAG_EMAIL, email);
                         editor.putString(TAG_USERNAME, username);
-                        editor.putString("alamat", alamat);
-                        editor.putString("telephone", telephone);
-                        editor.putString("image", image);
+//                        editor.putString("alamat", alamat);
+//                        editor.putString("telephone", telephone);
+//                        editor.putString("image", image);
                         editor.commit();
 
                         // Memanggil main activity
