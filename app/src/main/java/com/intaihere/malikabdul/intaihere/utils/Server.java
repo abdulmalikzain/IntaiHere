@@ -16,5 +16,7 @@ public class Server {
 
     public static String URL_SEND_LATLONG = "http://trackingeye.000webhostapp.com/trackingeye/SendLatitudeLongitude.php";
 
+    public static String UPLOAD_FOTO_URL = "http://trackingeye.000webhostapp.com/trackingeye/upload_image.php";
+
 
 }

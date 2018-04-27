@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class SettingFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
     private ListView list;
+    private LinearLayout llProfil;
     TextView tvUsernameSetting;
     private CircleImageView civCloseTentang, civCloseInfo, civFotoSetting;
     private Dialog dialog;
@@ -71,6 +73,8 @@ public class SettingFragment extends Fragment {
 
          civFotoSetting = view.findViewById(R.id.civ_fotosetting);
          tvUsernameSetting  = view.findViewById(R.id.tv_usernamesetting);
+
+         llProfil   = view.findViewById(R.id.ll_profil);
 
         SettingAdapter listAdapter = new
                 SettingAdapter(getActivity(), keterangan, imageId);
@@ -134,6 +138,15 @@ public class SettingFragment extends Fragment {
                             .show();
                 }
 
+            }
+        });
+
+
+        llProfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                startActivity(intent);
             }
         });
 
