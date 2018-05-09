@@ -1,5 +1,6 @@
 package com.intaihere.malikabdul.intaihere;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.location.Location;
 import android.os.Handler;
@@ -31,6 +32,7 @@ import com.intaihere.malikabdul.intaihere.menuHome.HomeFragment;
 import com.intaihere.malikabdul.intaihere.menuSetting.SettingFragment;
 import com.intaihere.malikabdul.intaihere.menuStatus.StatusFragment;
 import com.intaihere.malikabdul.intaihere.utils.BottomNavigationViewHelper;
+import com.intaihere.malikabdul.intaihere.utils.ServiceUpdateLokasi;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import android.Manifest;
@@ -60,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    FrameLayout frameLayout;
-    RelativeLayout relativeLayout;
+    private FrameLayout frameLayout;
+    private RelativeLayout relativeLayout;
     private static final String TAG = "MainActivity";
 
     boolean doubleBackToExitPressedOnce = false;
@@ -76,14 +78,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Location mLastLocation;
     private LocationRequest request;
     private boolean mRequestingLocationUpdates;
-    View mapView;
+    private View mapView;
+    private static final int PERMISSIONS_REQUEST = 1;
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapsiki);
         mapFragment.getMapAsync(this);
 
@@ -95,13 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         initGoogleAPIClient();//Init Google API Client
         checkPermissions();//Check Permission
 
-        mapView = mapFragment.getView();
-        View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-        rlp.setMargins(0, 180, 180, 0);
+        startTrackerService();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener botnav = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -170,6 +168,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }, 2000);
     }
 
+    ///////////////////service update lokasi
+    private void startTrackerService() {
+        int permission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            startService(new Intent(this, ServiceUpdateLokasi.class));
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST);
+        }
+        //finish();
+    }
+
     ///////////////////////////////
     /* Initiate Google API Client  */
     private void initGoogleAPIClient() {
@@ -212,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /* Show Location Access Dialog */
+    @SuppressLint("RestrictedApi")
     private void showSettingDialog() {
         request = new LocationRequest();
         request.setSmallestDisplacement(10);
@@ -371,6 +384,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //This line will show your current location on Map with GPS dot
         mMap.setMyLocationEnabled(true);
+
+        //layout button my postioon
+        mapView = mapFragment.getView();
+        View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        rlp.setMargins(0, 180, 180, 0);
 
     }
 
