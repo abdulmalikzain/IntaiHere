@@ -1,8 +1,14 @@
 package com.intaihere.malikabdul.intaihere;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,8 +22,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.places.Places;
@@ -26,12 +39,20 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.intaihere.malikabdul.intaihere.adapter.CustomInfoWindowGoogleMap;
 import com.intaihere.malikabdul.intaihere.menuGrup.GrupFragment;
+import com.intaihere.malikabdul.intaihere.menuHome.DetailMarkerActivity;
 import com.intaihere.malikabdul.intaihere.menuHome.HomeFragment;
 import com.intaihere.malikabdul.intaihere.menuSetting.SettingFragment;
+import com.intaihere.malikabdul.intaihere.menuStatus.DetailStatusActivity;
 import com.intaihere.malikabdul.intaihere.menuStatus.StatusFragment;
+import com.intaihere.malikabdul.intaihere.model.InfoWindowData;
 import com.intaihere.malikabdul.intaihere.utils.BottomNavigationViewHelper;
+import com.intaihere.malikabdul.intaihere.utils.Server;
 import com.intaihere.malikabdul.intaihere.utils.ServiceUpdateLokasi;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -58,6 +79,18 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.intaihere.malikabdul.intaihere.logReg.LoginActivity.my_shared_preferences;
+
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -65,14 +98,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FrameLayout frameLayout;
     private RelativeLayout relativeLayout;
     private static final String TAG = "MainActivity";
-
     boolean doubleBackToExitPressedOnce = false;
-
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
     private static final String BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED";
-
-
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
@@ -81,6 +110,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private View mapView;
     private static final int PERMISSIONS_REQUEST = 1;
     private SupportMapFragment mapFragment;
+    private SharedPreferences sharedpreferences;
+    private LatLng latLng;
+    private String image;
+    private Dialog dialog;
+    private CircleImageView civBtnMarker;
+    private Marker marker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         relativeLayout = findViewById(R.id.rel_home);
         frameLayout = findViewById(R.id.fragment_container);
+        civBtnMarker = findViewById(R.id.civ_btn_marker);
 
         setupBottomNavigationView();
 
@@ -100,6 +137,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         checkPermissions();//Check Permission
 
         startTrackerService();
+
+//        getMarkers();
+
+
+        civBtnMarker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMarkers();
+            }
+        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener botnav = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -113,24 +160,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 case R.id.navigation_home:
                     transaction.replace(R.id.fragment_container, new HomeFragment()).commit();
                     relativeLayout.setVisibility(View.VISIBLE);
-                    frameLayout.setVisibility(View.INVISIBLE);
+                    frameLayout.setVisibility(View.GONE);
                     return true;
 
                 case R.id.navigation_status:
                     transaction.replace(R.id.fragment_container, new StatusFragment()).commit();
-                    relativeLayout.setVisibility(View.INVISIBLE);
+                    relativeLayout.setVisibility(View.GONE);
                     frameLayout.setVisibility(View.VISIBLE);
                     return true;
 
                 case R.id.navigation_grup:
                     transaction.replace(R.id.fragment_container, new GrupFragment()).commit();
-                    relativeLayout.setVisibility(View.INVISIBLE);
+                    relativeLayout.setVisibility(View.GONE);
                     frameLayout.setVisibility(View.VISIBLE);
                     return true;
 
                 case R.id.navigation_setting:
                     transaction.replace(R.id.fragment_container, new SettingFragment()).commit();
-                    relativeLayout.setVisibility(View.INVISIBLE);
+                    relativeLayout.setVisibility(View.GONE);
                     frameLayout.setVisibility(View.VISIBLE);
                     return true;
             }
@@ -465,6 +512,170 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
         });
+    }
+
+    // Fungsi get JSON marker
+    public void getMarkers() {
+        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
+        final String id = (sharedpreferences.getString("id", ""));
+        StringRequest strReq = new StringRequest(Request.Method.GET, Server.URS_GET_MARKERS, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.e("Response: ", response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    String getObject = jObj.getString("wisata");
+                    JSONArray jsonArray = new JSONArray(getObject);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        image          = jsonObject.getString("image");
+                        String username     = jsonObject.getString("username");
+                        String telephone    = jsonObject.getString("telephone");
+                        String id_user = jsonObject.getString("id");
+                        latLng         = new LatLng(Double.parseDouble(jsonObject.getString("latitude")),
+                                Double.parseDouble(jsonObject.getString("longitude")));
+
+                        getAddress(latLng.latitude, latLng.longitude);
+                    }
+
+
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error: ", error.getMessage());
+                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(strReq);
+    }
+
+    public void getAddress(double LATITUDE, double LONGITUDE) {
+        //Set Address
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null && addresses.size() > 0) {
+
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                InfoWindowData info = new InfoWindowData();
+                info.setAlamat(address);
+                info.setLatitude(LATITUDE);
+                info.setLongitude(LONGITUDE);
+                LatLng latLng = new LatLng(LATITUDE,LONGITUDE);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(address);
+
+                CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(this);
+                mMap.setInfoWindowAdapter(customInfoWindow);
+
+                marker = mMap.addMarker(markerOptions);
+                marker.setTag(info);
+                marker.showInfoWindow();
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        Intent intent = new Intent(MainActivity.this, DetailMarkerActivity.class);
+
+//                        intent.putExtra("l", marker.getPosition());
+//                        intent.putExtra("a", marker.getTitle().trim());
+                        Double lat = marker.getPosition().latitude;
+                        Double lng = marker.getPosition().longitude;
+                        intent.putExtra("TAG_LATITUDE", Double.toString(lat));
+                        intent.putExtra("TAG_LONGITUDE", Double.toString(lng));
+
+                        startActivity(intent);
+                    }
+                });
+                }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    private void addMarker() {
+
+
+//        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(HomeActivity.this)));
+
+//        InfoWindowData info = new InfoWindowData();
+//        String alamat = info.getAlamat();
+//        double lat = info.getLatitude();
+//        Log.d(TAG, "addMarker: "+alamat+"ss"+lat);
+//        latLng1 = new LatLng(info.getLatitude(), info.getLongitude());
+//        info.setAlamat(address);
+
+//        MarkerOptions markerOptions = new MarkerOptions();
+//        markerOptions.position(latLng1);
+//        markerOptions.title(title);
+//        markerOptions.snippet(jalan);
+//        Log.d(TAG, "aaaaallll: "+address +"aaa"+latLng1);
+
+//        CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(this);
+//        mMap.setInfoWindowAdapter(customInfoWindow);
+//
+//        marker = mMap.addMarker(markerOptions);
+//        m.setTag(info);
+//        m.showInfoWindow();
+
+
+//        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+//            @Override
+//            public void onInfoWindowClick(Marker marker) {
+
+//                Intent intent = new Intent(MainActivity.this, HomeFragment.class);
+//                intent.putExtra("TAG_TELEPHONE", marker.getPosition());
+//                intent.putExtra("TAG_NAME", marker.getTitle());
+
+//                TextView txtclose, poptelephone, popname;
+//                CircleImageView ictelephone;
+//                dialog.setContentView(R.layout.layout_popup_infowindow);
+
+//                String username = intent.getExtras().getString("TAG_NAME");
+//                popname = (TextView) dialog.findViewById(R.id.popname);
+//                popname.setText(username);
+
+//                final String telephone = intent.getExtras().getString("TAG_TELEPHONE");
+//                poptelephone = (TextView) dialog.findViewById(R.id.popuptelephone);
+//                poptelephone.setText(telephone);
+
+//                txtclose = (TextView) dialog.findViewById(R.id.cancelpopup);
+//                txtclose.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+
+//                ictelephone = (CircleImageView) dialog.findViewById(R.id.ictelephone);
+//                ictelephone.setOnClickListener(new View.OnClickListener() {
+//                    public void onClick(View arg0) {
+//                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                        callIntent.setData(Uri.parse("tel:" +telephone));
+//
+//                        if (ActivityCompat.checkSelfPermission(HomeActivity.this,
+//                                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                            return;
+//                        }
+//                        startActivity(callIntent);
+//                    }
+//                });
+
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                dialog.show();
+//            }
+//        });
     }
 
 }

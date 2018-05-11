@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tv_iw_username"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="username"/>
+    <Button
+        android:id="@+id/btn111"
+        android:text="btnnn"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_iw_alamat"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="alamat"/>
+    <TextView
+        android:id="@+id/tv_iw_telephone"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="telephone"/>
+</LinearLayout>

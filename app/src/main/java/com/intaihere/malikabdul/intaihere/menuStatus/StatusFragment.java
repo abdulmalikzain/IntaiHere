@@ -130,7 +130,7 @@ public class StatusFragment extends Fragment {
                 try {
                     JSONObject object = new JSONObject(response);
                     String FotoProfile = object.getString("image");
-                    if (FotoProfile.equals("")){
+                    if (FotoProfile.equals("0")){
                         FotoProfile = "0";
                     }
                     Picasso.with(getContext())

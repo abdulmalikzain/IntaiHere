@@ -18,5 +18,5 @@ public class Server {
 
     public static String UPLOAD_FOTO_URL = "http://trackingeye.000webhostapp.com/trackingeye/upload_image.php";
 
-
+    public static String URS_GET_MARKERS = "http://trackingeye.000webhostapp.com/trackingeye/GetMarkers.php";
 }

@@ -49,7 +49,9 @@
         <service
             android:name=".utils.ServiceUpdateLokasi"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".menuHome.DetailMarkerActivity"></activity>
     </application>
 
 </manifest>
