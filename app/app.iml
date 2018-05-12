@@ -213,6 +213,7 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-auth-base-license-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-fitness-12.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.clans:fab-1.6.4" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-database-connection-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-appinvite-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-wallet-license-12.0.1" level="project" />

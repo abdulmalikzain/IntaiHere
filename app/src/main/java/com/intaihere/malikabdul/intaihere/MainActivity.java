@@ -1,8 +1,11 @@
 package com.intaihere.malikabdul.intaihere;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -17,9 +20,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +37,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.places.Places;
@@ -78,12 +86,15 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -113,9 +124,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private SharedPreferences sharedpreferences;
     private LatLng latLng;
     private String image;
-    private Dialog dialog;
     private CircleImageView civBtnMarker;
     private Marker marker;
+
+    private FloatingActionButton fab2;
+    private FloatingActionButton fab3;
+    private FloatingActionMenu menuRed;
 
 
     @Override
@@ -130,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         relativeLayout = findViewById(R.id.rel_home);
         frameLayout = findViewById(R.id.fragment_container);
         civBtnMarker = findViewById(R.id.civ_btn_marker);
+        fab2 = findViewById(R.id.fab2);
+        fab3 = findViewById(R.id.fab3);
+
+        menuRed = findViewById(R.id.menu_red);
+        menuRed.setClosedOnTouchOutside(true);
+        fab3.setEnabled(false);
 
         setupBottomNavigationView();
 
@@ -138,15 +158,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         startTrackerService();
 
-//        getMarkers();
-
-
-        civBtnMarker.setOnClickListener(new View.OnClickListener() {
+        fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getMarkers();
+                menuRed.setClosedOnTouchOutside(true);
+                fab3.setEnabled(true);
+                Toast.makeText(MainActivity.this, "Menampilkan Marker", Toast.LENGTH_SHORT).show();
             }
         });
+
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.clear();
+                fab3.setEnabled(false);
+                Toast.makeText(MainActivity.this, "Marker dihapus", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        civBtnMarker.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getMarkers();
+//            }
+//        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener botnav = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -530,11 +566,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     JSONArray jsonArray = new JSONArray(getObject);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        image          = jsonObject.getString("image");
-                        String username     = jsonObject.getString("username");
-                        String telephone    = jsonObject.getString("telephone");
+                        image = jsonObject.getString("image");
+                        String username = jsonObject.getString("username");
+                        String telephone = jsonObject.getString("telephone");
                         String id_user = jsonObject.getString("id");
-                        latLng         = new LatLng(Double.parseDouble(jsonObject.getString("latitude")),
+                        latLng = new LatLng(Double.parseDouble(jsonObject.getString("latitude")),
                                 Double.parseDouble(jsonObject.getString("longitude")));
 
                         getAddress(latLng.latitude, latLng.longitude);
@@ -571,10 +607,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 info.setAlamat(address);
                 info.setLatitude(LATITUDE);
                 info.setLongitude(LONGITUDE);
-                LatLng latLng = new LatLng(LATITUDE,LONGITUDE);
+                LatLng latLng = new LatLng(LATITUDE, LONGITUDE);
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title(address);
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MainActivity.this)));
 
                 CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(this);
                 mMap.setInfoWindowAdapter(customInfoWindow);
@@ -586,9 +623,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onInfoWindowClick(Marker marker) {
                         Intent intent = new Intent(MainActivity.this, DetailMarkerActivity.class);
-
-//                        intent.putExtra("l", marker.getPosition());
-//                        intent.putExtra("a", marker.getTitle().trim());
                         Double lat = marker.getPosition().latitude;
                         Double lng = marker.getPosition().longitude;
                         intent.putExtra("TAG_LATITUDE", Double.toString(lat));
@@ -597,7 +631,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(intent);
                     }
                 });
-                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -607,7 +641,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void addMarker() {
 
 
-//        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(HomeActivity.this)));
+//
 
 //        InfoWindowData info = new InfoWindowData();
 //        String alamat = info.getAlamat();
@@ -676,6 +710,39 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                dialog.show();
 //            }
 //        });
+    }
+
+    public Bitmap createCustomMarker(Context context) {
+
+        View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_icon_marker, null);
+
+        CircleImageView circleImageViewmarker = marker.findViewById(R.id.user_dp);
+
+        try {
+            URL url = new URL(image);
+//            Toast.makeText(mContext, "url : " + url, Toast.LENGTH_SHORT).show();
+//            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+            Picasso.with(context)
+                    .load(String.valueOf(url))
+                    .error(R.drawable.man)
+                    .into(circleImageViewmarker);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        marker.setLayoutParams(new ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT));
+        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        marker.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(marker.getMeasuredWidth(), marker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        marker.draw(canvas);
+
+        return bitmap;
     }
 
 }
