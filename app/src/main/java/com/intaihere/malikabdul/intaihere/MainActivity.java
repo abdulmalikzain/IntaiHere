@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private SharedPreferences sharedpreferences;
     private LatLng latLng;
     private String image;
-    private CircleImageView civBtnMarker;
     private Marker marker;
 
     private FloatingActionButton fab2;
@@ -143,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         relativeLayout = findViewById(R.id.rel_home);
         frameLayout = findViewById(R.id.fragment_container);
-        civBtnMarker = findViewById(R.id.civ_btn_marker);
         fab2 = findViewById(R.id.fab2);
         fab3 = findViewById(R.id.fab3);
 
@@ -177,12 +175,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-//        civBtnMarker.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getMarkers();
-//            }
-//        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener botnav = new BottomNavigationView.OnNavigationItemSelectedListener() {
