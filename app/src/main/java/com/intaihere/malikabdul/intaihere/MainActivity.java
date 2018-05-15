@@ -565,7 +565,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         latLng = new LatLng(Double.parseDouble(jsonObject.getString("latitude")),
                                 Double.parseDouble(jsonObject.getString("longitude")));
 
-                        getAddress(latLng.latitude, latLng.longitude);
+                        getAddress(latLng.latitude, latLng.longitude, username, telephone);
                     }
 
 
@@ -587,7 +587,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         requestQueue.add(strReq);
     }
 
-    public void getAddress(double LATITUDE, double LONGITUDE) {
+    public void getAddress(double LATITUDE, double LONGITUDE, String useraname, String telephone) {
         //Set Address
         try {
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -602,7 +602,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LatLng latLng = new LatLng(LATITUDE, LONGITUDE);
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
-                markerOptions.title(address);
+                markerOptions.title(useraname);
+                markerOptions.snippet(telephone);
                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MainActivity.this)));
 
                 CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(this);
@@ -619,6 +620,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Double lng = marker.getPosition().longitude;
                         intent.putExtra("TAG_LATITUDE", Double.toString(lat));
                         intent.putExtra("TAG_LONGITUDE", Double.toString(lng));
+                        intent.putExtra("username", marker.getTitle());
+                        intent.putExtra("telephone", marker.getSnippet());
 
                         startActivity(intent);
                     }

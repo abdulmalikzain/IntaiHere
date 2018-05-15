@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,66 +7,103 @@
     android:orientation="vertical"
     tools:context=".menuHome.DetailMarkerActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_detail_marker"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingRight="40dp"
-                android:paddingStart="20dp"
-                android:paddingTop="8dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:background="#c9dddddd"
-                    android:text="Posisi saya"
-
-                    android:paddingLeft="10dp"
-                    android:textColor="@color/colorWhite" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#c9dddddd"
-                    android:text="posisi tujuan"
-                    android:paddingLeft="10dp"
-                    android:textColor="#484848" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary"
-        android:paddingRight="30dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_detail_marker"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="25dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingRight="40dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="8dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:background="#c9dddddd"
+                        android:text="Posisi saya"
+                        android:paddingLeft="10dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/colorWhite" />
+
+                    <TextView
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/tv_posisi_tujuan"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#c9dddddd"
+                        android:text="posisi tujuan"
+                        android:paddingLeft="10dp"
+                        android:textColor="#484848" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary"
+            android:paddingRight="30dp">
+
+        </LinearLayout>
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/maps_detail_marker"
+            tools:context=".MapsActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colorWhite"
+            android:visibility="invisible"
+            android:layout_marginTop="-40dp"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_alignParentTop="true"
+        >
+
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/menu_down_direction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="6dp"
-            app:menu_labels_ellipsize="start"
+            app:menu_labels_ellipsize="end"
             app:menu_labels_singleLine="true"
             app:menu_fab_size="mini"
             app:menu_icon="@drawable/ic_phonesms"
@@ -94,7 +131,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="6dp"
-            app:menu_labels_ellipsize="middle"
+            android:layout_marginRight="80dp"
+            android:layout_alignParentRight="true"
+            app:menu_labels_ellipsize="end"
             app:menu_labels_singleLine="true"
             app:menu_fab_size="mini"
             app:menu_icon="@drawable/ic_place"
@@ -110,21 +149,6 @@
 
         </com.github.clans.fab.FloatingActionMenu>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/maps_detail_marker"
-        tools:context=".MapsActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/colorWhite"
-        android:visibility="invisible"
-        android:layout_marginTop="-40dp"/>
-
-</LinearLayout>
+</RelativeLayout>

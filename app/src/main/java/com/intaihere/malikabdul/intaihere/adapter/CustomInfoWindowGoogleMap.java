@@ -39,8 +39,6 @@ public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
 
         TextView username = view.findViewById(R.id.tv_iw_username);
         TextView alamat = view.findViewById(R.id.tv_iw_alamat);
-        TextView telephone = view.findViewById(R.id.tv_iw_telephone);
-        Button btn11 = view.findViewById(R.id.btn111);
 
 //        TextView hotel_tv = view.findViewById(R.id.hotels);
 //        TextView food_tv = view.findViewById(R.id.food);
@@ -55,9 +53,8 @@ public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
 //                "drawable", context.getPackageName());
 //        img.setImageResource(imageId);
 
-        username.setText(infoWindowData.getUsername());
+        username.setText(marker.getTitle());
         alamat.setText(infoWindowData.getAlamat());
-        telephone.setText(infoWindowData.getTelephone());
 
 //        LatLng latLng         = new LatLng(infoWindowData.getLatitude(), infoWindowData.getLongitude());
 //        Log.d(TAG, "bismillahhhhh: "+latLng);

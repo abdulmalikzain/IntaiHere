@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -24,20 +27,41 @@ import com.intaihere.malikabdul.intaihere.R;
 import java.util.ArrayList;
 
 public class DetailMarkerActivity extends AppCompatActivity {
+    private TextView tvPosisiTujuan;
+    private LatLng lngTujuan;
+    private Toolbar mActionToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_marker);
 
-        String fotoStatus;
-//        Bundle bundle = getIntent().getExtras();
-//        fotoStatus = bundle.getString("l");
+        tvPosisiTujuan = findViewById(R.id.tv_posisi_tujuan);
+
         Intent intent = this.getIntent();
-//        String username = intent.getExtras().getString("a");
         String lat =intent.getExtras().getString("TAG_LATITUDE");
         String lng =intent.getExtras().getString("TAG_LONGITUDE");
-        Toast.makeText(this, "lllllllll"+lat, Toast.LENGTH_SHORT).show();
+        String username = intent.getExtras().getString("username");
+        String telephone = intent.getExtras().getString("telephone");
+        Toast.makeText(this, "zzzzzzz"+lat+lng+username+telephone, Toast.LENGTH_SHORT).show();
+
+        tvPosisiTujuan.setText(username);
+
+        mActionToolbar = findViewById(R.id.toolbar_detail_marker);
+        setSupportActionBar(mActionToolbar);
+        getSupportActionBar().setTitle("");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    //button back toolbar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()== android.R.id.home)
+            finish();
+        return super.onOptionsItemSelected(item);
     }
 
 //    public void requestDirection() {
