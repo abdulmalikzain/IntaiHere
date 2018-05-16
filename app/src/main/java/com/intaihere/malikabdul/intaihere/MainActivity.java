@@ -2,16 +2,12 @@ package com.intaihere.malikabdul.intaihere;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,10 +18,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,6 +42,9 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -49,16 +53,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.intaihere.malikabdul.intaihere.adapter.CustomInfoWindowAdapter;
 import com.intaihere.malikabdul.intaihere.adapter.CustomInfoWindowGoogleMap;
+import com.intaihere.malikabdul.intaihere.adapter.PlaceAutocompleteAdapter;
 import com.intaihere.malikabdul.intaihere.menuGrup.GrupFragment;
 import com.intaihere.malikabdul.intaihere.menuHome.DetailMarkerActivity;
 import com.intaihere.malikabdul.intaihere.menuHome.HomeFragment;
 import com.intaihere.malikabdul.intaihere.menuSetting.SettingFragment;
-import com.intaihere.malikabdul.intaihere.menuStatus.DetailStatusActivity;
 import com.intaihere.malikabdul.intaihere.menuStatus.StatusFragment;
 import com.intaihere.malikabdul.intaihere.model.InfoWindowData;
+import com.intaihere.malikabdul.intaihere.model.PlaceInfo;
 import com.intaihere.malikabdul.intaihere.utils.BottomNavigationViewHelper;
 import com.intaihere.malikabdul.intaihere.utils.Server;
 import com.intaihere.malikabdul.intaihere.utils.ServiceUpdateLokasi;
@@ -129,6 +136,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FloatingActionButton fab2;
     private FloatingActionButton fab3;
     private FloatingActionMenu menuRed;
+    private AutoCompleteTextView mSearchText;
+    private static final float DEFAULT_ZOOM = 15f;
+    private PlaceInfo mPlace;
+    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
+            new LatLng(-40, -168), new LatLng(71, 136));
 
 
     @Override
@@ -144,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         frameLayout = findViewById(R.id.fragment_container);
         fab2 = findViewById(R.id.fab2);
         fab3 = findViewById(R.id.fab3);
+        mSearchText = findViewById(R.id.input_search);
 
         menuRed = findViewById(R.id.menu_red);
         menuRed.setClosedOnTouchOutside(true);
@@ -172,6 +186,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.clear();
                 fab3.setEnabled(false);
                 Toast.makeText(MainActivity.this, "Marker dihapus", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
+
+        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, googleApiClient,
+                LAT_LNG_BOUNDS, null);
+
+        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
+
+        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+
+                    //execute our method for searching
+//                    geoLocate();
+                }
+
+                return false;
             }
         });
 
@@ -257,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //finish();
     }
 
-    ///////////////////////////////
+    ///////////////////////////////dialog gps
     /* Initiate Google API Client  */
     private void initGoogleAPIClient() {
         //Without Google API Client Auto Location Dialog will not work
@@ -542,7 +581,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    // Fungsi get JSON marker
+    ////////////////////////// Fungsi get marker
     public void getMarkers() {
         sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
         final String id = (sharedpreferences.getString("id", ""));
@@ -633,80 +672,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return;
     }
 
-    private void addMarker() {
-
-
-//
-
-//        InfoWindowData info = new InfoWindowData();
-//        String alamat = info.getAlamat();
-//        double lat = info.getLatitude();
-//        Log.d(TAG, "addMarker: "+alamat+"ss"+lat);
-//        latLng1 = new LatLng(info.getLatitude(), info.getLongitude());
-//        info.setAlamat(address);
-
-//        MarkerOptions markerOptions = new MarkerOptions();
-//        markerOptions.position(latLng1);
-//        markerOptions.title(title);
-//        markerOptions.snippet(jalan);
-//        Log.d(TAG, "aaaaallll: "+address +"aaa"+latLng1);
-
-//        CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(this);
-//        mMap.setInfoWindowAdapter(customInfoWindow);
-//
-//        marker = mMap.addMarker(markerOptions);
-//        m.setTag(info);
-//        m.showInfoWindow();
-
-
-//        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-//            @Override
-//            public void onInfoWindowClick(Marker marker) {
-
-//                Intent intent = new Intent(MainActivity.this, HomeFragment.class);
-//                intent.putExtra("TAG_TELEPHONE", marker.getPosition());
-//                intent.putExtra("TAG_NAME", marker.getTitle());
-
-//                TextView txtclose, poptelephone, popname;
-//                CircleImageView ictelephone;
-//                dialog.setContentView(R.layout.layout_popup_infowindow);
-
-//                String username = intent.getExtras().getString("TAG_NAME");
-//                popname = (TextView) dialog.findViewById(R.id.popname);
-//                popname.setText(username);
-
-//                final String telephone = intent.getExtras().getString("TAG_TELEPHONE");
-//                poptelephone = (TextView) dialog.findViewById(R.id.popuptelephone);
-//                poptelephone.setText(telephone);
-
-//                txtclose = (TextView) dialog.findViewById(R.id.cancelpopup);
-//                txtclose.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                    }
-//                });
-
-//                ictelephone = (CircleImageView) dialog.findViewById(R.id.ictelephone);
-//                ictelephone.setOnClickListener(new View.OnClickListener() {
-//                    public void onClick(View arg0) {
-//                        Intent callIntent = new Intent(Intent.ACTION_CALL);
-//                        callIntent.setData(Uri.parse("tel:" +telephone));
-//
-//                        if (ActivityCompat.checkSelfPermission(HomeActivity.this,
-//                                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                            return;
-//                        }
-//                        startActivity(callIntent);
-//                    }
-//                });
-
-//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                dialog.show();
-//            }
-//        });
-    }
-
     public Bitmap createCustomMarker(Context context) {
 
         View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_icon_marker, null);
@@ -738,6 +703,104 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker.draw(canvas);
 
         return bitmap;
+    }
+
+
+    /////////////////////////////////////////mitch tabian
+
+
+    private void hideSoftKeyboard(){
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    /*
+        --------------------------- google places API autocomplete suggestions -----------------
+     */
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            hideSoftKeyboard();
+
+            final AutocompletePrediction item = mPlaceAutocompleteAdapter.getItem(i);
+            final String placeId = item.getPlaceId();
+
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(googleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(@NonNull PlaceBuffer places) {
+            if(!places.getStatus().isSuccess()){
+                Log.d(TAG, "onResult: Place query did not complete successfully: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            final Place place = places.get(0);
+
+            try{
+                mPlace = new PlaceInfo();
+                mPlace.setName(place.getName().toString());
+                Log.d(TAG, "onResult: name: " + place.getName());
+                mPlace.setAddress(place.getAddress().toString());
+                Log.d(TAG, "onResult: address: " + place.getAddress());
+//                mPlace.setAttributions(place.getAttributions().toString());
+//                Log.d(TAG, "onResult: attributions: " + place.getAttributions());
+                mPlace.setId(place.getId());
+                Log.d(TAG, "onResult: id:" + place.getId());
+                mPlace.setLatlng(place.getLatLng());
+                Log.d(TAG, "onResult: latlng: " + place.getLatLng());
+                mPlace.setRating(place.getRating());
+                Log.d(TAG, "onResult: rating: " + place.getRating());
+                mPlace.setPhoneNumber(place.getPhoneNumber().toString());
+                Log.d(TAG, "onResult: phone number: " + place.getPhoneNumber());
+                mPlace.setWebsiteUri(place.getWebsiteUri());
+                Log.d(TAG, "onResult: website uri: " + place.getWebsiteUri());
+
+                Log.d(TAG, "onResult: place: " + mPlace.toString());
+            }catch (NullPointerException e){
+                Log.e(TAG, "onResult: NullPointerException: " + e.getMessage() );
+            }
+
+            moveCamera(new LatLng(place.getViewport().getCenter().latitude,
+                    place.getViewport().getCenter().longitude), DEFAULT_ZOOM, mPlace);
+
+            places.release();
+        }
+    };
+
+    private void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo){
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        mMap.clear();
+
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MainActivity.this));
+
+        if(placeInfo != null){
+            try{
+                String snippet = "Address: " + placeInfo.getAddress() + "\n" +
+                        "Phone Number: " + placeInfo.getPhoneNumber() + "\n" +
+                        "Website: " + placeInfo.getWebsiteUri() + "\n" +
+                        "Price Rating: " + placeInfo.getRating() + "\n";
+
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .title(placeInfo.getName())
+                        .snippet(snippet);
+                marker = mMap.addMarker(options);
+
+            }catch (NullPointerException e){
+                Log.e(TAG, "moveCamera: NullPointerException: " + e.getMessage() );
+            }
+        }else{
+            mMap.addMarker(new MarkerOptions().position(latLng));
+        }
+
+        hideSoftKeyboard();
     }
 
 }

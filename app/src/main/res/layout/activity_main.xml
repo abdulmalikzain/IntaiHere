@@ -28,6 +28,39 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:elevation="10dp"
+            android:layout_below="@id/toolbarhome"
+            android:background="#a0ffffff"
+            android:id="@+id/relLayout_pencarian">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:id="@+id/ic_magnify"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/places_ic_search"/>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/ic_magnify"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:id="@+id/input_search"
+                android:background="@null"
+                android:hint="Masukkan jalan, kota"
+                android:imeOptions="actionSearch"/>
+        </RelativeLayout>
+
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
@@ -44,10 +77,11 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:paddingRight="10dp"
-            android:paddingBottom="60dp"
+            android:paddingBottom="100dp"
             android:paddingLeft="10dp"
             app:menu_icon="@drawable/ic_place"
             app:menu_labels_ellipsize="end"
+            android:elevation="3dp"
             app:menu_labels_singleLine="true"
             app:menu_colorNormal="@color/colorWhite"
             app:menu_backgroundColor="#ccffffff"
@@ -59,6 +93,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_place"
                 app:fab_size="mini"
+                app:fab_colorNormal="@color/colorPrimary"
                 app:fab_label="Tampilkan Marker" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -67,6 +102,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/places_ic_clear"
                 app:fab_size="mini"
+                app:fab_colorNormal="@color/colorPrimary"
+                app:fab_colorDisabled="@color/colorWhite"
                 app:fab_label="Hapus Marker"/>
 
         </com.github.clans.fab.FloatingActionMenu>

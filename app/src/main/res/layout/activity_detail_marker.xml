@@ -26,19 +26,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
-                </LinearLayout>
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/posdir"/>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:paddingRight="40dp"
-                    android:paddingStart="20dp"
                     android:paddingTop="8dp">
                     <TextView
                         android:layout_width="match_parent"
@@ -95,8 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
-        android:layout_alignParentTop="true"
-        >
+        android:layout_alignParentTop="true">
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/menu_down_direction"
@@ -106,21 +105,26 @@
             app:menu_labels_ellipsize="end"
             app:menu_labels_singleLine="true"
             app:menu_fab_size="mini"
-            app:menu_icon="@drawable/ic_phonesms"
+            app:menu_icon="@drawable/ic_direction"
             app:menu_colorNormal="@color/colorWhite"
             app:menu_openDirection="down">
-
             <com.github.clans.fab.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_sms"
+                android:src="@drawable/ic_car"
+                app:fab_size="mini"
+                app:fab_label="Menu item 1" />
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_bike"
                 app:fab_size="mini"
                 app:fab_label="Menu item 1" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_phone"
+                android:src="@drawable/ic_walk"
                 app:fab_size="mini"
                 app:fab_label="Menu item 2" />
 
@@ -136,7 +140,7 @@
             app:menu_labels_ellipsize="end"
             app:menu_labels_singleLine="true"
             app:menu_fab_size="mini"
-            app:menu_icon="@drawable/ic_place"
+            app:menu_icon="@drawable/ic_phonesms"
             app:menu_colorNormal="@color/colorWhite"
             app:menu_openDirection="down">
 
@@ -144,6 +148,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_phone"
+                app:fab_size="mini"
+                app:fab_label="Menu item 2" />
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sms"
                 app:fab_size="mini"
                 app:fab_label="Menu item 2" />
 
