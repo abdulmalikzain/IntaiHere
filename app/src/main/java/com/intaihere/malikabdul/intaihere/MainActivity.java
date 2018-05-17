@@ -191,28 +191,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
 
-        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, googleApiClient,
-                LAT_LNG_BOUNDS, null);
-
-        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
-
-        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-
-                    //execute our method for searching
-//                    geoLocate();
-                }
-
-                return false;
-            }
-        });
 
     }
 
@@ -498,6 +477,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //This line will show your current location on Map with GPS dot
         mMap.setMyLocationEnabled(true);
+        setupLocationManager();
 
         //layout button my postioon
         mapView = mapFragment.getView();
@@ -506,7 +486,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-        rlp.setMargins(0, 180, 180, 0);
+        rlp.setMargins(0, 160, 180, 0);
 
     }
 
@@ -534,17 +514,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //buildGoogleApiClient();
         if (googleApiClient == null) {
 
-            googleApiClient = new GoogleApiClient.Builder(this)
+            googleApiClient = new GoogleApiClient
+                    .Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .addApi(Places.GEO_DATA_API)
                     .addApi(Places.PLACE_DETECTION_API)
+                    .enableAutoManage(this, this)
                     .build();
             //mGoogleApiClient = new GoogleApiClient.Builder(this);
         }
         googleApiClient.connect();
 //        showSettingDialog();
+
+        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
+
+        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, googleApiClient,
+                LAT_LNG_BOUNDS, null);
+
+        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
+
+        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+
+                    //execute our method for searching
+                    geoLocate();
+                }
+
+                return false;
+            }
+        });
     }
 
     private void setInitialLocation() {
@@ -798,6 +803,44 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }else{
             mMap.addMarker(new MarkerOptions().position(latLng));
+        }
+
+        hideSoftKeyboard();
+    }
+
+    private void geoLocate(){
+        Log.d(TAG, "geoLocate: geolocating");
+
+        String searchString = mSearchText.getText().toString();
+
+        Geocoder geocoder = new Geocoder(MainActivity.this);
+        List<Address> list = new java.util.ArrayList<>();
+        try{
+            list = geocoder.getFromLocationName(searchString, 1);
+        }catch (IOException e){
+            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+        }
+
+        if(list.size() > 0){
+            Address address = list.get(0);
+
+            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+
+            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
+                    address.getAddressLine(0));
+        }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom, String title){
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        if(!title.equals("My Location")){
+            MarkerOptions options = new MarkerOptions()
+                    .position(latLng)
+                    .title(title);
+            mMap.addMarker(options);
         }
 
         hideSoftKeyboard();

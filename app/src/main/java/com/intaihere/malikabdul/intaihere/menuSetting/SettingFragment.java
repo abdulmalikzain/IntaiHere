@@ -49,17 +49,17 @@ public class SettingFragment extends Fragment {
     private CircleImageView civCloseTentang, civCloseInfo, civFotoSetting;
     private Dialog dialog;
     private String[] keterangan = {
-            "Hapus akun",
             "Tentang Intai Here",
             "Info Aplikasi",
+            "Hapus akun",
             "Keluar Akun"
 
     } ;
     private Integer[] imageId = {
             R.drawable.ic_setting,
-            R.drawable.ic_status,
-            R.drawable.ic_dialog_close_dark,
-            R.drawable.ic_audiotrack_light
+            R.drawable.ic_info,
+            R.drawable.ic_delete,
+            R.drawable.ic_logout
 //            R.drawable.download
     };
 
@@ -87,6 +87,15 @@ public class SettingFragment extends Fragment {
                 if (position == 0) {
 //                    Intent myIntent = new Intent(view.getContext(), ListItemActivity1.class);
 //                    startActivityForResult(myIntent, 0);
+                    showPopupTentang();
+                }
+
+                if (position == 1) {
+                    showInfoAplikasi();
+                }
+
+                if (position == 2) {
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
                     sharedPreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
@@ -106,14 +115,6 @@ public class SettingFragment extends Fragment {
                             })
 //                        .setIcon(android.R.drawable.alert)
                             .show();
-                }
-
-                if (position == 1) {
-                    showPopupTentang();
-                }
-
-                if (position == 2) {
-                    showInfoAplikasi();
                 }
 
                 if (position == 3) {

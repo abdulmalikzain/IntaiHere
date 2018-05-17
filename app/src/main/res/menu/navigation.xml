@@ -8,12 +8,12 @@
     <item
         android:id="@+id/navigation_status"
         android:icon="@drawable/ic_status"
-        android:title="Favorite" />
+        android:title="Status" />
 
     <item
         android:id="@+id/navigation_grup"
         android:icon="@drawable/ic_grup"
-        android:title="Kategori" />
+        android:title="Grup" />
     <item
         android:id="@+id/navigation_setting"
         android:icon="@drawable/ic_setting"

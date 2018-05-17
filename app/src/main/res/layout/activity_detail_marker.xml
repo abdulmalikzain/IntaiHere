@@ -82,6 +82,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment" />
 
         <TextView
+            android:id="@+id/tv_hasil_dir"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/colorWhite"
@@ -109,23 +110,29 @@
             app:menu_colorNormal="@color/colorWhite"
             app:menu_openDirection="down">
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_dir_car"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_car"
                 app:fab_size="mini"
+                app:fab_colorNormal="@color/colorWhite"
                 app:fab_label="Menu item 1" />
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_dir_bike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_bike"
                 app:fab_size="mini"
+                app:fab_colorNormal="@color/colorWhite"
                 app:fab_label="Menu item 1" />
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_dir_walk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_walk"
                 app:fab_size="mini"
+                app:fab_colorNormal="@color/colorWhite"
                 app:fab_label="Menu item 2" />
 
         </com.github.clans.fab.FloatingActionMenu>
@@ -145,16 +152,20 @@
             app:menu_openDirection="down">
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_dm_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_phone"
                 app:fab_size="mini"
+                app:fab_colorNormal="@color/colorWhite"
                 app:fab_label="Menu item 2" />
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_dm_sms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_sms"
                 app:fab_size="mini"
+                app:fab_colorNormal="@color/colorWhite"
                 app:fab_label="Menu item 2" />
 
         </com.github.clans.fab.FloatingActionMenu>
