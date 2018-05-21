@@ -94,12 +94,24 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
 
         requestLocationUpdates();
 
-        fabDirBike.setOnClickListener(new View.OnClickListener() {
+        fabDirWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestDirection();
+                requestDirectionJalan();
             }
         });
+//        fabDirBike.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                requestDirectionSepeda();
+//            }
+//        });
+//        fabDirCar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                requestDirectionMobil();
+//            }
+//        });
 
         fabPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,8 +139,6 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-//        googleMap.addMarker(new MarkerOptions().position(latLngTujuan).title(username));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngTujuan, 15f));
     }
 
 
@@ -150,9 +160,7 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
                 public void onLocationResult(LocationResult locationResult) {
                     Location location = locationResult.getLastLocation();
                     if (location != null) {
-                        Log.d(TAG, "location update " + location);
                         latLngPosisi = new LatLng(location.getLatitude(), location.getLongitude());
-                        Log.d(TAG, "posisiiiii: "+latLngPosisi);
                     }
                 }
             }, null);
@@ -161,12 +169,11 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    /////////////////////
-    public void requestDirection() {
-        Snackbar.make(fabDirCar, "Direction Requesting...", Snackbar.LENGTH_SHORT).show();
-//        final LatLng a = new LatLng(-6.9907074,110.4088166);
-//        final LatLng b = new LatLng(-6.9920513,110.4196016);
 
+    /////////////////////request direction
+    public void requestDirectionMobil() {
+        Snackbar.make(fabDirCar, "Direction Requesting...", Snackbar.LENGTH_SHORT).show();
+        Log.d(TAG, "xxxxxxxx: "+latLngPosisi);
         GoogleDirection.withServerKey(serverKey)
                 .from(latLngPosisi)
                 .to(latLngTujuan)
@@ -179,9 +186,96 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
 
                             googleMap.clear();
                             googleMap.addMarker(new MarkerOptions().position(latLngPosisi));
-                            googleMap.addMarker(new MarkerOptions().position(latLngTujuan));
-                            Log.d(TAG, "ooooooooooo: "+latLngPosisi);
-                            Log.d(TAG, "kikikikikiki: "+latLngTujuan);
+                            googleMap.addMarker(new MarkerOptions().position(latLngTujuan).title(username));
+
+                            for (int i = 0; i < direction.getRouteList().size(); i++) {
+                                Route route = direction.getRouteList().get(i);
+                                Leg leg = route.getLegList().get(0);
+                                String color = colors[i % colors.length];
+                                ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
+                                googleMap.addPolyline(DirectionConverter.createPolyline(DetailMarkerActivity.this,
+                                        directionPositionList, 5, Color.parseColor(color)));
+
+                                setCameraWithCoordinationBounds(route);
+
+                                tvHasilDir.setVisibility(View.VISIBLE);
+                                tvHasilDir.setText(String.format("distance = %s , duration = %s"
+                                        ,leg.getDistance().getText() , leg.getDuration().getText()));
+                            }
+
+
+                        } else {
+//                            Snackbar.make(btnRequestDirection, direction.getStatus(), Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
+
+                    }
+                });
+    }
+
+    public void requestDirectionSepeda() {
+        Snackbar.make(fabDirBike, "Direction Requesting...", Snackbar.LENGTH_SHORT).show();
+        GoogleDirection.withServerKey(serverKey)
+                .from(latLngPosisi)
+                .to(latLngTujuan)
+                .transportMode(TransportMode.BICYCLING)
+                .alternativeRoute(true)
+                .execute(new DirectionCallback() {
+                    @Override
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                        if (direction.isOK()) {
+
+                            googleMap.clear();
+                            googleMap.addMarker(new MarkerOptions().position(latLngPosisi));
+                            googleMap.addMarker(new MarkerOptions().position(latLngTujuan).title(username));
+
+                            for (int i = 0; i < direction.getRouteList().size(); i++) {
+                                Route route = direction.getRouteList().get(i);
+                                Leg leg = route.getLegList().get(0);
+                                String color = colors[i % colors.length];
+                                ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
+                                googleMap.addPolyline(DirectionConverter.createPolyline(DetailMarkerActivity.this,
+                                        directionPositionList, 5, Color.parseColor(color)));
+
+                                setCameraWithCoordinationBounds(route);
+
+                                tvHasilDir.setVisibility(View.VISIBLE);
+                                tvHasilDir.setText(String.format("distance = %s , duration = %s"
+                                        ,leg.getDistance().getText() , leg.getDuration().getText()));
+                            }
+
+
+                        } else {
+//                            Snackbar.make(btnRequestDirection, direction.getStatus(), Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
+
+                    }
+                });
+    }
+
+    public void requestDirectionJalan() {
+        Snackbar.make(fabDirWalk, "Direction Requesting...", Snackbar.LENGTH_SHORT).show();
+        Log.d(TAG, "xxxxxxxxxxx: "+latLngPosisi);
+        GoogleDirection.withServerKey(serverKey)
+                .from(latLngPosisi)
+                .to(latLngTujuan)
+                .transportMode(TransportMode.WALKING)
+                .alternativeRoute(true)
+                .execute(new DirectionCallback() {
+                    @Override
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                        if (direction.isOK()) {
+
+                            googleMap.clear();
+                            googleMap.addMarker(new MarkerOptions().position(latLngPosisi));
+                            googleMap.addMarker(new MarkerOptions().position(latLngTujuan).title(username));
 
                             for (int i = 0; i < direction.getRouteList().size(); i++) {
                                 Route route = direction.getRouteList().get(i);
@@ -217,7 +311,6 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
         LatLngBounds bounds = new LatLngBounds(southwest, northeast);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
     }
-
 
     //////////////////telephone
     private void telephone(){

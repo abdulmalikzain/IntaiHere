@@ -169,21 +169,21 @@ public class StatusFragment extends Fragment {
             long hari  = TimeUnit.MILLISECONDS.toDays(dateDiff);
 
             if (detik < 60) {
-                convTime = detik+"detik lalu";
+                convTime = detik+ "detik lalu";
             } else if (menit < 60) {
-                convTime = menit+"menit lalu";
+                convTime = menit+ "menit lalu";
             } else if (jam < 24) {
-                convTime = jam+"jam lalu";
+                convTime = jam+ "jam lalu";
             } else if (hari >= 7) {
                 if (hari > 30) {
-                    convTime = (hari / 30)+"bulan lalu";
+                    convTime = (hari / 30)+ "bulan lalu";
                 } else if (hari > 360) {
-                    convTime = (hari / 360)+"tahun lalu";
+                    convTime = (hari / 360)+ "tahun lalu";
                 } else {
                     convTime = (hari / 7) + "minggu lalu";
                 }
             } else if (hari < 7) {
-                convTime = hari+"hari lalu";
+                convTime = hari+ "hari lalu";
             }
 
             final ModelStatus modelTask = new ModelStatus();
