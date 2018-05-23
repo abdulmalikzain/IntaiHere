@@ -136,7 +136,19 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        parsingData();
+        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
+        String username = (sharedpreferences.getString("username", ""));
+        String email    = (sharedpreferences.getString("email", ""));
+        String telephone = (sharedpreferences.getString("telephone",""));
+        String alamat   = (sharedpreferences.getString("alamat", ""));
+        String image    = (sharedpreferences.getString("image", ""));
+
+        tvUsername.setText(username);
+        tvAlamat.setText(alamat);
+        tvEmail.setText(email);
+        tvTelephone.setText(telephone);
+        Picasso.with(getApplication()).load(image).error(R.drawable.man).into(civFotoProfile);
+
     }
 
     public String getStringImage(Bitmap bmp) {
@@ -313,50 +325,6 @@ public class ProfileActivity extends AppCompatActivity {
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
-    }
-
-    private void parsingData(){
-        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
-        final String id = (sharedpreferences.getString("id", ""));
-        Log.d(TAG, "aaaaa: "+id);
-        String url_fotoProfile = Server.URL_DATA_BY + id;
-
-        StringRequest request = new StringRequest(Request.Method.GET, url_fotoProfile, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    String FotoProfile = object.getString("image");
-                    String username     = object.getString("username");
-                    String email        = object.getString("email");
-//                    String alamat       = object.getString("alamat");
-                    String telephone    = object.getString("telephone");
-                    Log.d(TAG, "tesssss: "+username);
-
-                    tvUsername.setText(username);
-                    tvEmail.setText(email);
-                    tvTelephone.setText(telephone);
-//                    tvAlamat.setText(alamat);
-
-                    if (FotoProfile.equals("")){
-                        FotoProfile = "0";
-                    }
-                    Picasso.with(ProfileActivity.this)
-                            .load(FotoProfile)
-                            .placeholder(R.drawable.man)
-                            .into(civFotoProfile);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(request);
     }
 
 

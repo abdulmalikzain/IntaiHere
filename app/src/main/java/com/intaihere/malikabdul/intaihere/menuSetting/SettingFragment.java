@@ -76,6 +76,10 @@ public class SettingFragment extends Fragment {
 
          llProfil   = view.findViewById(R.id.ll_profil);
 
+        sharedPreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
+        String image = (sharedPreferences.getString("image", ""));
+        Picasso.with(getContext()).load(image).error(R.drawable.man).into(civFotoSetting);
+
         SettingAdapter listAdapter = new
                 SettingAdapter(getActivity(), keterangan, imageId);
         list= view.findViewById(R.id.list_view_setting);
@@ -151,8 +155,6 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        fotoProfile();
-
          return view;
     }
 
@@ -187,11 +189,11 @@ public class SettingFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(LoginActivity.session_status, false);
         editor.putString("id", null);
-//        editor.putString(TAG_USERNAME, null);
-//        editor.putString(TAG_EMAIL, null);
-//        editor.putString("telephone", null);
-//        editor.putString("alamat", null);
-//        editor.putString("image", null);
+        editor.putString("username", null);
+        editor.putString("email", null);
+        editor.putString("telephone", null);
+        editor.putString("alamat", null);
+        editor.putString("image", null);
         editor.clear();
         editor.commit();
         getActivity().finish();
@@ -241,42 +243,6 @@ public class SettingFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(strReq);
-    }
-
-    private void fotoProfile(){
-        sharedPreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
-        final String id = (sharedPreferences.getString("id", ""));
-        String url_fotoProfile = Server.URL_DATA_BY + id;
-
-        StringRequest request = new StringRequest(Request.Method.GET, url_fotoProfile, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    String foto = object.getString("image");
-                    String nama = object.getString("username");
-                    tvUsernameSetting.setText(nama);
-
-                    if (foto.equals("")){
-                        foto = "0";
-                    }
-                    Picasso.with(getContext())
-                            .load(foto)
-                            .placeholder(R.drawable.man)
-                            .into(civFotoSetting);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(request);
     }
 
 }

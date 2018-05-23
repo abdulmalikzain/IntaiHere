@@ -47,7 +47,7 @@ public class UbahProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ubah_profile);
 
-        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_ubahprofil);
+        mActionToolbar = findViewById(R.id.toolbar_ubahprofil);
         setSupportActionBar(mActionToolbar);
         getSupportActionBar().setTitle("Ubah Data Pengguna");
 
@@ -66,7 +66,15 @@ public class UbahProfileActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
         String username = (sharedpreferences.getString("username", ""));
         String id = (sharedpreferences.getString("id", ""));
+        String email    =(sharedpreferences.getString("email",""));
+        String telephone = (sharedpreferences.getString("telephone",""));
+        String alamat   = (sharedpreferences.getString("alamat",""));
+
         etId.setText(id);
+        etUsername.setText(username);
+        etAlamat.setText(alamat);
+        etTelephone.setText(telephone);
+        etEmail.setText(email);
 
         btnUbahData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +83,6 @@ public class UbahProfileActivity extends AppCompatActivity {
             }
         });
 
-        parsingDataBy();
     }
 
     @Override
@@ -141,40 +148,6 @@ public class UbahProfileActivity extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-    }
-
-    private void parsingDataBy(){
-        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
-        final String id = (sharedpreferences.getString("id", ""));
-        String url_fotoProfile = Server.URL_DATA_BY + id;
-
-        StringRequest request = new StringRequest(Request.Method.GET, url_fotoProfile, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    String username     = object.getString("username");
-                    String email        = object.getString("email");
-                    String alamat       = object.getString("alamat");
-                    String telephone    = object.getString("telephone");
-
-                    etUsername.setText(username);
-                    etEmail.setText(email);
-                    etTelephone.setText(telephone);
-                    etAlamat.setText(alamat);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(request);
     }
 
 }

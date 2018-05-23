@@ -66,7 +66,6 @@ public class StatusFragment extends Fragment {
         modelTasks = new ArrayList<>();
 
         tampilStatus();
-        fotoProfile();
 
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +75,10 @@ public class StatusFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
+        String image = (sharedPreferences.getString("image", ""));
+        Picasso.with(getContext()).load(image).error(R.drawable.man).into(ivFotoProfile);
 
         return view;
     }
@@ -117,38 +120,6 @@ public class StatusFragment extends Fragment {
         });
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(requestTampil);
-    }
-
-    private void fotoProfile(){
-        sharedpreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
-        final String id = (sharedpreferences.getString("id", ""));
-        String url_fotoProfile = Server.URL_DATA_BY + id;
-
-        StringRequest request = new StringRequest(Request.Method.GET, url_fotoProfile, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    String FotoProfile = object.getString("image");
-                    if (FotoProfile.equals("0")){
-                        FotoProfile = "0";
-                    }
-                    Picasso.with(getContext())
-                            .load(FotoProfile)
-                            .placeholder(R.drawable.man)
-                            .into(ivFotoProfile);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(request);
     }
 
     public String covertTimeToText(String dataDate, String Nama, String image, String status, String tujuan, String foto_status) {
