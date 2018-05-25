@@ -166,15 +166,7 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
             public void onResponse(String response) {
                 progressDialog.dismiss();
                 finishAndRemoveTask();
-//                try {
-//                    JSONObject object = new JSONObject(response);
-//
-//                    Intent intent = new Intent(InputStatusActivity.this, StatusFragment.class);
-//                    startActivity(intent);
-//                    finish();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+
             }
         }, new Response.ErrorListener() {
             @Override

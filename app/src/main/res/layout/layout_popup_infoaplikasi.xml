@@ -37,5 +37,19 @@
         android:textAlignment="center"
         android:text="@string/tv_ket_infoApp"
         android:textColor="#9db3ac"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Developer by"
+        android:textColor="@color/colorWhite"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_gravity="center"
+        android:textColor="@color/colorWhite"
+        android:text="@string/developer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

@@ -40,27 +40,11 @@ public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
         TextView username = view.findViewById(R.id.tv_iw_username);
         TextView alamat = view.findViewById(R.id.tv_iw_alamat);
 
-//        TextView hotel_tv = view.findViewById(R.id.hotels);
-//        TextView food_tv = view.findViewById(R.id.food);
-//        TextView transport_tv = view.findViewById(R.id.transport);
-
-//        name_tv.setText(marker.getTitle());
-//        details_tv.setText(marker.getSnippet());
-
         InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
 
-//        int imageId = context.getResources().getIdentifier(infoWindowData.getImage().toLowerCase(),
-//                "drawable", context.getPackageName());
-//        img.setImageResource(imageId);
 
         username.setText(marker.getTitle());
         alamat.setText(infoWindowData.getAlamat());
-
-//        LatLng latLng         = new LatLng(infoWindowData.getLatitude(), infoWindowData.getLongitude());
-//        Log.d(TAG, "bismillahhhhh: "+latLng);
-//        marker.setPosition(latLng);
-//        marker.setIcon(BitmapDescriptorFactory.defaultMarker( BitmapDescriptorFactory.HUE_BLUE));
-
 
         return view;
     }

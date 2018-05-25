@@ -13,9 +13,9 @@
     <item
         android:id="@+id/navigation_grup"
         android:icon="@drawable/ic_grup"
-        android:title="Grup" />
+        android:title="Anggota" />
     <item
         android:id="@+id/navigation_setting"
         android:icon="@drawable/ic_setting"
-        android:title="Akun" />
+        android:title="Pengaturan" />
 </menu>

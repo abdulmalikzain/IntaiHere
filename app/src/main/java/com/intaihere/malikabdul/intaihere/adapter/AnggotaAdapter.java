@@ -59,10 +59,14 @@ public class AnggotaAdapter extends BaseAdapter {
 
         final ModelAnggota modelAnggota = anggotaItems.get(position);
 
-        Picasso.with(this.activity)
-                .load(modelAnggota.getGambar())
-                .error(R.drawable.man)
-                .into(imageView);
+        if (!modelAnggota.getGambar().equals("")){
+            Picasso.with(this.activity)
+                    .load(modelAnggota.getGambar())
+                    .centerCrop()
+                    .resize(100, 100)
+                    .error(R.drawable.man)
+                    .into(imageView);
+        }
 
         username.setText(modelAnggota.getUsername());
         telephone.setText(modelAnggota.getTelephone());

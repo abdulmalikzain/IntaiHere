@@ -88,8 +88,6 @@ public class StatusFragment extends Fragment {
 
     private void tampilStatus(){
         String url_getTask = Server.URL_GET_TASK;
-
-
         StringRequest requestTampil = new StringRequest(Request.Method.GET, url_getTask, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

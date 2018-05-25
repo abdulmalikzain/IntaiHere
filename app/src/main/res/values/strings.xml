@@ -8,5 +8,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tv_ket_tentang">Intai adalah sebuah aplikasi pelacakan antara user satu dengan lainya yang berbasis android. Aplikasi ini memanfaatkan fitur yang terdapat pada smartphone yaitu GPS (Global Positioning System) untuk request koordinat latitude dan longitude yang kemudian dikirimkan oleh server disimpan ke database. Data lokasi yang sudah disimpan kemudian dikirim server dan ditampilkan pada Google maps</string>
     <string name="tv_ket_infoApp">© 2017-2018 PT. Integravity Biru Jasalia All rights reserved</string>
+    <string name="developer">Abdul Malik Zain Syahputro</string>
 
 </resources>

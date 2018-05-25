@@ -124,7 +124,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
         String image    = (sharedpreferences.getString("image", ""));
-        Picasso.with(getApplication()).load(image).error(R.drawable.man).into(civFotoProfile);
+        if (!image.equals("")){
+            Picasso.with(getApplication()).load(image).error(R.drawable.man).into(civFotoProfile);
+        }
     }
 
     //button back toolbar
@@ -149,7 +151,6 @@ public class ProfileActivity extends AppCompatActivity {
         tvAlamat.setText(alamat);
         tvEmail.setText(email);
         tvTelephone.setText(telephone);
-        Picasso.with(getApplication()).load(image).error(R.drawable.man).into(civFotoProfile);
 
     }
 
