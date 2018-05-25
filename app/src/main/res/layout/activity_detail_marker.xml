@@ -116,15 +116,15 @@
                 android:src="@drawable/ic_car"
                 app:fab_size="mini"
                 app:fab_colorNormal="@color/colorWhite"
-                app:fab_label="Menu item 1" />
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab_dir_bike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_bike"
-                app:fab_size="mini"
-                app:fab_colorNormal="@color/colorWhite"
-                app:fab_label="Menu item 1" />
+                app:fab_label="Mobil" />
+            <!--<com.github.clans.fab.FloatingActionButton-->
+                <!--android:id="@+id/fab_dir_bike"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/ic_bike"-->
+                <!--app:fab_size="mini"-->
+                <!--app:fab_colorNormal="@color/colorWhite"-->
+                <!--app:fab_label="Menu item 1" />-->
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_dir_walk"
@@ -133,7 +133,7 @@
                 android:src="@drawable/ic_walk"
                 app:fab_size="mini"
                 app:fab_colorNormal="@color/colorWhite"
-                app:fab_label="Menu item 2" />
+                app:fab_label="Jalan Kaki" />
 
         </com.github.clans.fab.FloatingActionMenu>
 
@@ -158,7 +158,7 @@
                 android:src="@drawable/ic_phone"
                 app:fab_size="mini"
                 app:fab_colorNormal="@color/colorWhite"
-                app:fab_label="Menu item 2" />
+                app:fab_label="telepone" />
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_dm_sms"
                 android:layout_width="wrap_content"
@@ -166,7 +166,7 @@
                 android:src="@drawable/ic_sms"
                 app:fab_size="mini"
                 app:fab_colorNormal="@color/colorWhite"
-                app:fab_label="Menu item 2" />
+                app:fab_label="SMS" />
 
         </com.github.clans.fab.FloatingActionMenu>
 

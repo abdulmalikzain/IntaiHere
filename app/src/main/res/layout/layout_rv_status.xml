@@ -18,7 +18,7 @@
             android:orientation="horizontal"
             android:layout_margin="5dp">
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_rv_statusfotouser"
+                android:id="@+id/civ_rv_statusfoto"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/man"/>
@@ -41,15 +41,23 @@
                     android:text="waktu"
                     android:textSize="6pt"/>
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/tv_rv_StatusStatus"
                     android:layout_width="0dp"
                     android:layout_height="0dp"/>
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/tv_rv_statustujuan"
                     android:layout_width="0dp"
                     android:layout_height="0dp"/>
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/tv_rv_fotostatus"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"/>
+                <TextView
+                    android:visibility="invisible"
+                    android:id="@+id/tv_rv_fotosuser"
                     android:layout_width="0dp"
                     android:layout_height="0dp"/>
             </LinearLayout>

@@ -50,6 +50,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.intaihere.malikabdul.intaihere.logReg.LoginActivity.my_shared_preferences;
+import static com.intaihere.malikabdul.intaihere.logReg.LoginActivity.session_status;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -121,8 +122,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-//        parsingData();
-
+        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
+        String image    = (sharedpreferences.getString("image", ""));
+        Picasso.with(getApplication()).load(image).error(R.drawable.man).into(civFotoProfile);
     }
 
     //button back toolbar
@@ -177,6 +179,10 @@ public class ProfileActivity extends AppCompatActivity {
                             int success = jObj.getInt(TAG_SUCCESS);
 
                             if (success == 1) {
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putBoolean(session_status, true);
+                                editor.putString("image", getStringImage(decoded));
+                                editor.commit();
                                 Log.e("v Add", jObj.toString());
                                 Toast.makeText(ProfileActivity.this, jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
 

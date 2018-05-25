@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,6 +13,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +30,18 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.model.Leg;
+import com.akexorcist.googledirection.model.Route;
+import com.akexorcist.googledirection.util.DirectionConverter;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -102,6 +112,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -130,18 +141,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private SupportMapFragment mapFragment;
     private SharedPreferences sharedpreferences;
     private LatLng latLng;
+    private LatLng latLngTujuan, latLngPosisi;
     private String image;
     private Marker marker;
 
     private FloatingActionButton fab2;
     private FloatingActionButton fab3;
     private FloatingActionMenu menuRed;
+    private CircleImageView dirHome, civTypeMap;
     private AutoCompleteTextView mSearchText;
     private static final float DEFAULT_ZOOM = 15f;
     private PlaceInfo mPlace;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136));
+    private TextView tvHasilDirection;
+    private String[] colors = {"#FF3F51B5", "#FF2E2F33", "#FF7B7B7C"};
+    private String serverKey = "AIzaSyCgFCt1IvIIrQKqmEExyLIfSlNad0m88FU";
+    private String titleAlamat;
 
 
     @Override
@@ -157,7 +174,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         frameLayout = findViewById(R.id.fragment_container);
         fab2 = findViewById(R.id.fab2);
         fab3 = findViewById(R.id.fab3);
-        mSearchText = findViewById(R.id.input_search);
+        civTypeMap = findViewById(R.id.civTypeMap);
+//        mSearchText = findViewById(R.id.input_search);
+//        dirHome     = findViewById(R.id.menu_direction_home);
+//        tvHasilDirection = findViewById(R.id.tv_hasil_dirhome);
 
         menuRed = findViewById(R.id.menu_red);
         menuRed.setClosedOnTouchOutside(true);
@@ -169,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         checkPermissions();//Check Permission
 
         startTrackerService();
+//        init();
 
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,16 +204,44 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMap.clear();
+
                 fab3.setEnabled(false);
                 Toast.makeText(MainActivity.this, "Marker dihapus", Toast.LENGTH_SHORT).show();
             }
         });
 
+//        dirHome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                marker.remove();
+//                requestDirectionMobil();
+//            }
+//        });
+        civTypeMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(MainActivity.this, civTypeMap);
+                popup.getMenuInflater()
+                        .inflate(R.menu.popup_type_map, popup.getMenu());
 
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
 
+                        switch (item.getItemId()){
+                            case R.id.popup_satellite :
+                                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                                return true;
+                            case R.id.popup_normal:
+                                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                                return true;
+                        }
+                        return false;
+                    }
+                });
 
-
+                popup.show(); //showing popup menu
+            }
+        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener botnav = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -339,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         setInitialLocation();
+
                         // All location settings are satisfied. The client can initialize location
                         // requests here.
 //                        updateGPSStatus("GPS is Enabled in your device");
@@ -469,6 +519,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap = googleMap;
 
+        mMap.setPadding(0,0,0,10);
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
                 (this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -480,13 +532,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setupLocationManager();
 
         //layout button my postioon
-        mapView = mapFragment.getView();
-        View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-        rlp.setMargins(0, 160, 180, 0);
+//        mapView = mapFragment.getView();
+//        View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+//        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+//
+//        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+//        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+//        rlp.setMargins(0, 160, 180, 0);
 
     }
 
@@ -528,28 +580,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleApiClient.connect();
 //        showSettingDialog();
 
-        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
-
-        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, googleApiClient,
-                LAT_LNG_BOUNDS, null);
-
-        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
-
-        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-
-                    //execute our method for searching
-                    geoLocate();
-                }
-
-                return false;
-            }
-        });
     }
 
     private void setInitialLocation() {
@@ -560,8 +590,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
 
-        //getMarkers();
-
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -571,10 +599,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.d(TAG, "setInitialLocation:moving camera to: lat: " + location.getLatitude() + ", lng: " + location.getLongitude());
                 try {
                     LatLng positionUpdate = new LatLng(location.getLatitude(), location.getLongitude());
+                    latLngPosisi = new LatLng(location.getLatitude(), location.getLongitude());
                     CameraUpdate update = CameraUpdateFactory.newLatLngZoom(positionUpdate, 15);
                     mMap.animateCamera(update);
 
-//                    sendLatitudeLongitude();
                 } catch (Exception ex) {
 
                     ex.printStackTrace();
@@ -609,7 +637,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         latLng = new LatLng(Double.parseDouble(jsonObject.getString("latitude")),
                                 Double.parseDouble(jsonObject.getString("longitude")));
 
-                        getAddress(latLng.latitude, latLng.longitude, username, telephone);
+                        if (!id_user.equals(id)){
+                            getAddress(latLng.latitude, latLng.longitude, username, telephone);
+                        }
+
                     }
 
 
@@ -712,137 +743,211 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     /////////////////////////////////////////mitch tabian
-    
-    private void hideSoftKeyboard(){
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
+//    private void init(){
+//        Log.d(TAG, "init: initializing");
+//
+//        googleApiClient = new GoogleApiClient
+//                .Builder(this)
+//                .addApi(Places.GEO_DATA_API)
+//                .addApi(Places.PLACE_DETECTION_API)
+//                .enableAutoManage(this, this)
+//                .build();
+//
+//        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
+//
+//        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, googleApiClient,
+//                LAT_LNG_BOUNDS, null);
+//
+//        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
+//
+//        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+//                if(actionId == EditorInfo.IME_ACTION_SEARCH
+//                        || actionId == EditorInfo.IME_ACTION_DONE
+//                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+//                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+//
+//                    //execute our method for searching
+//                    geoLocate();
+//                }
+//
+//                return false;
+//            }
+//        });
+//
+////        geoLocate();
+//    }
+//
+//    private void hideSoftKeyboard(){
+//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//    }
+//
+//    /*
+//        --------------------------- google places API autocomplete suggestions -----------------
+//     */
+//
+//    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//            hideSoftKeyboard();
+//
+//            final AutocompletePrediction item = mPlaceAutocompleteAdapter.getItem(i);
+//            final String placeId = item.getPlaceId();
+//
+//            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+//                    .getPlaceById(googleApiClient, placeId);
+//            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+//        }
+//    };
+//
+//    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
+//        @Override
+//        public void onResult(@NonNull PlaceBuffer places) {
+//            if(!places.getStatus().isSuccess()){
+//                Log.d(TAG, "onResult: Place query did not complete successfully: " + places.getStatus().toString());
+//                places.release();
+//                return;
+//            }
+//            final Place place = places.get(0);
+//
+//            try{
+//                mPlace = new PlaceInfo();
+//                mPlace.setName(place.getName().toString());
+//                Log.d(TAG, "onResult: name: " + place.getName());
+//                mPlace.setAddress(place.getAddress().toString());
+//                Log.d(TAG, "onResult: address: " + place.getAddress());
+////                mPlace.setAttributions(place.getAttributions().toString());
+////                Log.d(TAG, "onResult: attributions: " + place.getAttributions());
+//                mPlace.setId(place.getId());
+//                Log.d(TAG, "onResult: id:" + place.getId());
+//                mPlace.setLatlng(place.getLatLng());
+//                Log.d(TAG, "onResult: latlng: " + place.getLatLng());
+//
+//                mPlace.setRating(place.getRating());
+//                Log.d(TAG, "onResult: rating: " + place.getRating());
+//                mPlace.setPhoneNumber(place.getPhoneNumber().toString());
+//                Log.d(TAG, "onResult: phone number: " + place.getPhoneNumber());
+//                mPlace.setWebsiteUri(place.getWebsiteUri());
+//                Log.d(TAG, "onResult: website uri: " + place.getWebsiteUri());
+//
+//                Log.d(TAG, "onResult: place: " + mPlace.toString());
+//            }catch (NullPointerException e){
+//                Log.e(TAG, "onResult: NullPointerException: " + e.getMessage() );
+//            }
+//
+//            titleAlamat = place.getAddress().toString();
+//            latLngTujuan = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+//            moveCamera(new LatLng(place.getViewport().getCenter().latitude,
+//                    place.getViewport().getCenter().longitude), DEFAULT_ZOOM, mPlace);
+//
+//            places.release();
+//        }
+//    };
+//
+//    private void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo){
+//        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+//
+//        mMap.clear();
+//
+//        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MainActivity.this));
+//        dirHome.setVisibility(View.VISIBLE);
+//        if(placeInfo != null){
+//            try{
+//                String snippet = "Address: " + placeInfo.getAddress() + "\n" +
+//                        "Phone Number: " + placeInfo.getPhoneNumber() + "\n" +
+//                        "Website: " + placeInfo.getWebsiteUri() + "\n" +
+//                        "Price Rating: " + placeInfo.getRating() + "\n";
+//
+//                MarkerOptions options = new MarkerOptions()
+//                        .position(latLng)
+//                        .title(placeInfo.getName())
+//                        .snippet(snippet);
+//                marker = mMap.addMarker(options);
+//
+//            }catch (NullPointerException e){
+//                Log.e(TAG, "moveCamera: NullPointerException: " + e.getMessage() );
+//            }
+//        }else{
+//            mMap.addMarker(new MarkerOptions().position(latLng));
+//        }
+//
+//        hideSoftKeyboard();
+//    }
+//
+//    private void geoLocate(){
+//        Log.d(TAG, "geoLocate: geolocating");
+//
+//        String searchString = mSearchText.getText().toString();
+//
+//        Geocoder geocoder = new Geocoder(MainActivity.this);
+//        List<Address> list = new java.util.ArrayList<>();
+//        try{
+//            list = geocoder.getFromLocationName(searchString, 1);
+//        }catch (IOException e){
+//            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+//        }
+//
+//        if(list.size() > 0){
+//            Address address = list.get(0);
+//
+//            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+//        }
+//    }
+//
+//    /////////////direction
+//    public void requestDirectionMobil() {
+//        Snackbar.make(dirHome, "Sedang mengarahkan...", Snackbar.LENGTH_SHORT).show();
+////        Log.d(TAG, "posisiss: "+ latLngPosisi +"tujuann"+latLngTujuan);
+//        GoogleDirection.withServerKey("AIzaSyCgFCt1IvIIrQKqmEExyLIfSlNad0m88FU")
+//                .from(latLngPosisi)
+//                .to(latLngTujuan)
+//                .transportMode(TransportMode.DRIVING
+//                )
+//                .alternativeRoute(true)
+//                .execute(new DirectionCallback() {
+//                    @Override
+//                    public void onDirectionSuccess(Direction direction, String rawBody) {
+//                        if (direction.isOK()) {
+//
+////                            mMap.clear();
+//                            mMap.addMarker(new MarkerOptions().position(latLngTujuan));
+//
+//                            for (int i = 0; i < direction.getRouteList().size(); i++) {
+//                                Route route = direction.getRouteList().get(i);
+//                                Leg leg = route.getLegList().get(0);
+//                                String color = colors[i % colors.length];
+//                                ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
+//                                mMap.addPolyline(DirectionConverter.createPolyline(MainActivity.this,
+//                                        directionPositionList, 5, Color.parseColor(color)));
+//
+//                                setCameraWithCoordinationBounds(route);
+//
+//                                tvHasilDirection.setVisibility(View.VISIBLE);
+//                                tvHasilDirection.setText(String.format("distance = %s , duration = %s"
+//                                        ,leg.getDistance().getText() , leg.getDuration().getText()));
+//                            }
+//
+//
+//                        } else {
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onDirectionFailure(Throwable t) {
+//
+//                    }
+//                });
+//    }
+//
+//    private void setCameraWithCoordinationBounds(Route route) {
+//        LatLng southwest = route.getBound().getSouthwestCoordination().getCoordination();
+//        LatLng northeast = route.getBound().getNortheastCoordination().getCoordination();
+//        LatLngBounds bounds = new LatLngBounds(southwest, northeast);
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+//
+//    }
 
-    /*
-        --------------------------- google places API autocomplete suggestions -----------------
-     */
-
-    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            hideSoftKeyboard();
-
-            final AutocompletePrediction item = mPlaceAutocompleteAdapter.getItem(i);
-            final String placeId = item.getPlaceId();
-
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(googleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(@NonNull PlaceBuffer places) {
-            if(!places.getStatus().isSuccess()){
-                Log.d(TAG, "onResult: Place query did not complete successfully: " + places.getStatus().toString());
-                places.release();
-                return;
-            }
-            final Place place = places.get(0);
-
-            try{
-                mPlace = new PlaceInfo();
-                mPlace.setName(place.getName().toString());
-                Log.d(TAG, "onResult: name: " + place.getName());
-                mPlace.setAddress(place.getAddress().toString());
-                Log.d(TAG, "onResult: address: " + place.getAddress());
-//                mPlace.setAttributions(place.getAttributions().toString());
-//                Log.d(TAG, "onResult: attributions: " + place.getAttributions());
-                mPlace.setId(place.getId());
-                Log.d(TAG, "onResult: id:" + place.getId());
-                mPlace.setLatlng(place.getLatLng());
-                Log.d(TAG, "onResult: latlng: " + place.getLatLng());
-                mPlace.setRating(place.getRating());
-                Log.d(TAG, "onResult: rating: " + place.getRating());
-                mPlace.setPhoneNumber(place.getPhoneNumber().toString());
-                Log.d(TAG, "onResult: phone number: " + place.getPhoneNumber());
-                mPlace.setWebsiteUri(place.getWebsiteUri());
-                Log.d(TAG, "onResult: website uri: " + place.getWebsiteUri());
-
-                Log.d(TAG, "onResult: place: " + mPlace.toString());
-            }catch (NullPointerException e){
-                Log.e(TAG, "onResult: NullPointerException: " + e.getMessage() );
-            }
-
-            moveCamera(new LatLng(place.getViewport().getCenter().latitude,
-                    place.getViewport().getCenter().longitude), DEFAULT_ZOOM, mPlace);
-
-            places.release();
-        }
-    };
-
-    private void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        mMap.clear();
-
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MainActivity.this));
-
-        if(placeInfo != null){
-            try{
-                String snippet = "Address: " + placeInfo.getAddress() + "\n" +
-                        "Phone Number: " + placeInfo.getPhoneNumber() + "\n" +
-                        "Website: " + placeInfo.getWebsiteUri() + "\n" +
-                        "Price Rating: " + placeInfo.getRating() + "\n";
-
-                MarkerOptions options = new MarkerOptions()
-                        .position(latLng)
-                        .title(placeInfo.getName())
-                        .snippet(snippet);
-                marker = mMap.addMarker(options);
-
-            }catch (NullPointerException e){
-                Log.e(TAG, "moveCamera: NullPointerException: " + e.getMessage() );
-            }
-        }else{
-            mMap.addMarker(new MarkerOptions().position(latLng));
-        }
-
-        hideSoftKeyboard();
-    }
-
-    private void geoLocate(){
-        Log.d(TAG, "geoLocate: geolocating");
-
-        String searchString = mSearchText.getText().toString();
-
-        Geocoder geocoder = new Geocoder(MainActivity.this);
-        List<Address> list = new java.util.ArrayList<>();
-        try{
-            list = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
-        }
-
-        if(list.size() > 0){
-            Address address = list.get(0);
-
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                    address.getAddressLine(0));
-        }
-    }
-
-    private void moveCamera(LatLng latLng, float zoom, String title){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        if(!title.equals("My Location")){
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng)
-                    .title(title);
-            mMap.addMarker(options);
-        }
-
-        hideSoftKeyboard();
-    }
 
 }

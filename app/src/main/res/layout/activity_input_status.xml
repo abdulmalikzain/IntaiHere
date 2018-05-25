@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tabs_input_status"
-        android:theme="@style/ToolBarStyle">
+        android:theme="@style/ToolBarStyleBlack">
 
     </android.support.v7.widget.Toolbar>
 
@@ -91,32 +91,25 @@
                 android:layout_height="wrap_content"
                 android:text="tambahkan foto"/>
             <TextView
-                android:visibility="invisible"
                 android:id="@+id/tv_hapus_foto"
                 android:layout_weight="2"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hapus"/>
+                android:textColor="#ff0000"
+                android:text="*foto tidak boleh kosong"/>
         </LinearLayout>
 
-        <RelativeLayout
+        <Button
             android:id="@+id/rl_btn_simpan"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
+            android:text="Simpan"
+            android:textColor="@color/colorWhite"
             android:layout_marginRight="20dp"
-            android:background="@drawable/btn_ripple">
-            <TextView
-                android:textColor="@color/colorWhite"
-                android:textSize="9pt"
-                android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Simpan"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
+            android:background="@drawable/btn_ripple" />
 
     </LinearLayout>
 

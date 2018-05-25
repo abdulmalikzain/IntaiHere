@@ -139,12 +139,48 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"/>
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--app:layout_anchor="@id/appbar"-->
+        <!--app:layout_anchorGravity="bottom|right|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:clickable="true"/>-->
 
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fam_hubungi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:paddingRight="10dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        app:menu_icon="@drawable/ic_phonesms"
+        app:menu_labels_ellipsize="end"
+        android:elevation="3dp"
+        app:menu_labels_singleLine="true"
+        app:menu_colorNormal="@color/colorToska"
+        app:menu_backgroundColor="#ccffffff"
+        app:menu_fab_label="Menu label">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_anggota_sms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sms"
+            app:fab_size="mini"
+            app:fab_colorNormal="#ff9327"
+            app:fab_label="SMS" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_anggota_telepon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_phone"
+            app:fab_size="mini"
+            app:fab_colorNormal="#496aff"
+            app:fab_label="Telepon"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
 </android.support.design.widget.CoordinatorLayout>

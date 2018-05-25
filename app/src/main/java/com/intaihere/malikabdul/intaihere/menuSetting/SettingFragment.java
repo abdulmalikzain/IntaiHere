@@ -56,7 +56,7 @@ public class SettingFragment extends Fragment {
 
     } ;
     private Integer[] imageId = {
-            R.drawable.ic_setting,
+            R.drawable.ic_help,
             R.drawable.ic_info,
             R.drawable.ic_delete,
             R.drawable.ic_logout
@@ -78,7 +78,11 @@ public class SettingFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
         String image = (sharedPreferences.getString("image", ""));
-        Picasso.with(getContext()).load(image).error(R.drawable.man).into(civFotoSetting);
+
+        if (!image.equals("")){
+            Picasso.with(getContext()).load(image).error(R.drawable.man).into(civFotoSetting);
+        }
+
 
         SettingAdapter listAdapter = new
                 SettingAdapter(getActivity(), keterangan, imageId);

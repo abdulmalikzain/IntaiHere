@@ -116,7 +116,10 @@ public class UbahProfileActivity extends AppCompatActivity {
                             editor.putBoolean(session_status, true);
                             editor.putString("id", id);
                             editor.putString("username", username);
-
+                            editor.putString("email", email);
+                            editor.putString("telephone", telephone);
+                            editor.putString("alamat", alamat);
+                            editor.commit();
 
                             Toast.makeText(UbahProfileActivity.this, obj.getString("message"),
                                     Toast.LENGTH_LONG).show();

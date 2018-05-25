@@ -35,12 +35,7 @@
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/civ_status_detailfotouser"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="50dp"
-            android:src="@drawable/man"/>
+
         <TextView
             android:id="@+id/tv_status_detUsername"
             android:layout_width="wrap_content"
@@ -48,14 +43,14 @@
             android:text="Username"
             android:textSize="8pt"
             android:textColor="#fff"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="50dp"/>
 
         <TextView
             android:id="@+id/tv_status_detWaktu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Waktu"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="50dp"
             android:textSize="6pt"
             android:textColor="#fff"
             android:layout_below="@id/tv_status_detUsername"/>

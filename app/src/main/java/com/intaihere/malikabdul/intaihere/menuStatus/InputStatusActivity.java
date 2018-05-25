@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -45,6 +46,7 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.intaihere.malikabdul.intaihere.MainActivity;
 import com.intaihere.malikabdul.intaihere.R;
 import com.intaihere.malikabdul.intaihere.adapter.PlaceAutocompleteAdapter;
 import com.intaihere.malikabdul.intaihere.model.PlaceInfo;
@@ -74,7 +76,7 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
     private EditText etStatus;
     private ImageView ivFotoStatus, ivTambahFoto;
     private TextView tvHapus;
-    private RelativeLayout rlSimpan;
+    private Button rlSimpan;
     private Intent intent;
     private Uri fileUri;
     private Bitmap bitmap, decoded;
@@ -115,10 +117,13 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        rlSimpan.setEnabled(false);
+
         ivTambahFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
+                rlSimpan.setEnabled(true);
             }
         });
 
@@ -138,6 +143,62 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
         if (item.getItemId()== android.R.id.home)
             finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    ///////////////////////
+    private void inputTask(){
+        String url_inputTask = Server.URL_INPUT_TASK;
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Mengirim status...");
+        progressDialog.show();
+        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
+        final String idx = (sharedpreferences.getString("id", ""));
+        final String username = (sharedpreferences.getString("username", ""));
+        final String lokasi = actInputAlamat.getText().toString();
+        final String status = etStatus.getText().toString();
+
+        long date = System.currentTimeMillis();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        final String
+                dateNow = dateFormat.format(date);
+        StringRequest request = new StringRequest(Request.Method.POST, url_inputTask, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                finishAndRemoveTask();
+//                try {
+//                    JSONObject object = new JSONObject(response);
+//
+//                    Intent intent = new Intent(InputStatusActivity.this, StatusFragment.class);
+//                    startActivity(intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_users", idx);
+                params.put("username", username);
+                params.put("tujuan", lokasi);
+                params.put("waktu", dateNow);
+                params.put("status", status);
+                params.put("foto_status", getStringImage(decoded));
+//                params.put("image", image);
+
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
     }
 
     //////////////////////////////IMAGE
@@ -215,7 +276,7 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
 
         //menampilkan gambar yang dipilih dari camera/gallery ke ImageView
         ivFotoStatus.setImageBitmap(decoded);
-//        tv_upload.setVisibility(View.VISIBLE);
+
     }
 
     // fungsi resize image
@@ -234,58 +295,6 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    ///////////////////////
-    private void inputTask(){
-        String url_inputTask = Server.URL_INPUT_TASK;
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Mengirim status...");
-        progressDialog.show();
-        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
-        final String idx = (sharedpreferences.getString("id", ""));
-        final String username = (sharedpreferences.getString("username", ""));
-        final String image = (sharedpreferences.getString("image", ""));
-        final String lokasi = actInputAlamat.getText().toString();
-        final String status = etStatus.getText().toString();
-
-        long date = System.currentTimeMillis();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        final String
-                dateNow = dateFormat.format(date);
-
-        StringRequest request = new StringRequest(Request.Method.POST, url_inputTask, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                progressDialog.dismiss();
-                try {
-                    JSONObject object = new JSONObject(response);
-
-                    finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("id_users", idx);
-                params.put("username", username);
-                params.put("tujuan", lokasi);
-                params.put("waktu", dateNow);
-                params.put("status", status);
-                params.put("foto_status", getStringImage(decoded));
-                params.put("image", image);
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(request);
-    }
 
 
     /////////////auto complet

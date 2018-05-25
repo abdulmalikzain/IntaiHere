@@ -45,7 +45,7 @@
             android:id="@+id/tv_usernamesetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Pengguna"
+            android:text="Pengaturan akun"
             android:textStyle="bold"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"/>

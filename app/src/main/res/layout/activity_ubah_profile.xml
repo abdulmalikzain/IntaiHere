@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_margin="10dp"
-            app:cardElevation="5dp">
+            app:cardElevation="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -101,21 +101,16 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <Button
+            android:id="@+id/btn_simpan_ubahdata"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            app:cardElevation="5dp">
-
-            <Button
-                android:id="@+id/btn_simpan_ubahdata"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="Simpan"
-                android:textAllCaps="false"
-                android:background="@drawable/ripple_effect"/>
-        </android.support.v7.widget.CardView>
+            android:text="Simpan"
+            android:textSize="8pt"
+            android:textColor="@color/colorWhite"
+            android:textAllCaps="false"
+            android:background="@drawable/btn_ripple"/>
 
     </LinearLayout>
 

@@ -77,14 +77,19 @@ public class StatusFragment extends Fragment {
         });
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
-        String image = (sharedPreferences.getString("image", ""));
-        Picasso.with(getContext()).load(image).error(R.drawable.man).into(ivFotoProfile);
+        final String image = (sharedPreferences.getString("image", ""));
+        if (!image.equals("")){
+            Picasso.with(getContext()).load(image).error(R.drawable.man).into(ivFotoProfile);
+        }
+
 
         return view;
     }
 
     private void tampilStatus(){
         String url_getTask = Server.URL_GET_TASK;
+
+
         StringRequest requestTampil = new StringRequest(Request.Method.GET, url_getTask, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -96,15 +101,13 @@ public class StatusFragment extends Fragment {
 
                         String dataDate = data.getString("waktu");
                         String Nama = data.getString("username");
-                        String image = data.getString("image");
+//                        String image = data.getString("image");
                         String status = data.getString("status");
                         String tujuan = data.getString("tujuan");
                         String foto_status = data.getString("foto_status");
-                        covertTimeToText(dataDate, Nama, image, status, tujuan, foto_status);
+                        covertTimeToText(dataDate, Nama,  status, tujuan, foto_status);
 
-                        //creating adapter object and setting it to recyclerview
-                        StatusAdapter adapter = new StatusAdapter(getContext(), modelTasks);
-                        recyclerView.setAdapter(adapter);
+
                     }
 
 
@@ -122,7 +125,7 @@ public class StatusFragment extends Fragment {
         requestQueue.add(requestTampil);
     }
 
-    public String covertTimeToText(String dataDate, String Nama, String image, String status, String tujuan, String foto_status) {
+    public String covertTimeToText(String dataDate, String Nama, String status, String tujuan, String foto_status) {
 
         String convTime = null;
 
@@ -160,11 +163,15 @@ public class StatusFragment extends Fragment {
             final ModelStatus modelTask = new ModelStatus();
             modelTask.setWaktu(convTime);
             modelTask.setUsername(Nama);
-            modelTask.setGambar(image);
+//            modelTask.setGambar(image);
             modelTask.setStatus(status);
             modelTask.setTujuan(tujuan);
             modelTask.setFoto_status(foto_status);
             modelTasks.add(modelTask);
+
+            //creating adapter object and setting it to recyclerview
+            StatusAdapter adapter = new StatusAdapter(getContext(), modelTasks);
+            recyclerView.setAdapter(adapter);
 
         } catch (ParseException e) {
             e.printStackTrace();

@@ -32,7 +32,6 @@ public class DetailStatusActivity extends AppCompatActivity {
         tvDetStatus     = findViewById(R.id.tv_status_detStatus);
         tvDetTujuan     = findViewById(R.id.tv_status_detTujuan);
         ivFotoStatus    = findViewById(R.id.iv_status_detailgambar);
-        civFotoUser     = findViewById(R.id.civ_status_detailfotouser);
 
         Bundle bundle = getIntent().getExtras();
         tvDetUsername.setText(bundle.getString("username"));
