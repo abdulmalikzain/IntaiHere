@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".menuSetting.UploadFotoActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarUploadFoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:theme="@style/ToolBarStyleBlack"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_uploadfoto"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/man"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        app:civ_fill_color="@color/colorGrey"/>
+    <ImageView
+        android:id="@+id/iv_pilihfoto"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-50dp"
+        android:layout_marginBottom="25dp"
+        android:src="@drawable/ic_camera"/>
+
+    <TextView
+        android:id="@+id/tv_simpanfotoProfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Foto"
+        android:layout_marginBottom="-20dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btn_simpanperubahan"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="40dp"
+        android:textColor="@color/colorWhite"
+        android:text="Simpan Perubahan"
+        android:background="@drawable/btn_ripple"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

@@ -28,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etUsername, etEmail, etPassword, etTelephone;
     private TextView tvBtnRegister ;
     private Button btnLoginreg;
+    private String image = Server.URS_GET_IMAGEDEFAULT;
 
     SharedPreferences sharedPreferences;
 
@@ -109,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("email", email);
                 params.put("password", password);
                 params.put("telephone", telephone);
+                params.put("image", image);
 
                 //returing the response
                 return requestHandler.sendPostRequest(Server.URL_REGISTER, params);

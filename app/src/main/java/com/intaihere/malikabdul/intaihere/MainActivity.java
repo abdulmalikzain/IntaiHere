@@ -721,6 +721,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             Picasso.with(context)
                     .load(String.valueOf(url))
+                    .centerInside()
+                    .resize(55,55)
                     .error(R.drawable.man)
                     .into(circleImageViewmarker);
 

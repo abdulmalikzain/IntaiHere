@@ -51,7 +51,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".menuHome.DetailMarkerActivity"></activity>
+        <activity android:name=".menuHome.DetailMarkerActivity" />
+        <activity android:name=".menuSetting.UploadFotoActivity"></activity>
     </application>
 
 </manifest>

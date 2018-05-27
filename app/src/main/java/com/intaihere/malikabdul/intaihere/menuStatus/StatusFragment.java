@@ -80,6 +80,11 @@ public class StatusFragment extends Fragment {
         final String image = (sharedPreferences.getString("image", ""));
         if (!image.equals("")){
             Picasso.with(getContext()).load(image).error(R.drawable.man).into(ivFotoProfile);
+        }else {
+            Picasso.with(getContext()).load(Server.URS_GET_IMAGEDEFAULT)
+                    .centerCrop()
+                    .resize(50,50)
+                    .error(R.drawable.man).into(ivFotoProfile);
         }
 
 

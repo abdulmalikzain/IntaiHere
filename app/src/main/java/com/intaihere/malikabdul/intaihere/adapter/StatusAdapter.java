@@ -36,7 +36,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.TaskViewHo
         holder.tvTujuan.setText(modelTask.getTujuan());
         holder.tvFoto_status.setText(modelTask.getFoto_status());
 
-        Picasso.with(context).load(modelTask.getFoto_status()).centerCrop().resize(100, 100).error(R.drawable.man).into(holder.civFoto);
+        Picasso.with(context).load(modelTask.getFoto_status()).centerCrop().resize(80, 80).error(R.drawable.man).into(holder.civFoto);
     }
 
     public class TaskViewHolder extends RecyclerView.ViewHolder {

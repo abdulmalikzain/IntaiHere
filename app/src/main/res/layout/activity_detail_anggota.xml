@@ -17,6 +17,7 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:collapsedTitleTextAppearance="@color/colorBlack"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
@@ -162,7 +163,7 @@
         app:menu_labels_singleLine="true"
         app:menu_colorNormal="@color/colorToska"
         app:menu_backgroundColor="#ccffffff"
-        app:menu_fab_label="Menu label">
+        app:menu_fab_label="Hubungi">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_anggota_sms"

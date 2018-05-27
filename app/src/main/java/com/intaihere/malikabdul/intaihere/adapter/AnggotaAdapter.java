@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.intaihere.malikabdul.intaihere.R;
 import com.intaihere.malikabdul.intaihere.model.ModelAnggota;
+import com.intaihere.malikabdul.intaihere.utils.Server;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -62,6 +63,13 @@ public class AnggotaAdapter extends BaseAdapter {
         if (!modelAnggota.getGambar().equals("")){
             Picasso.with(this.activity)
                     .load(modelAnggota.getGambar())
+                    .centerCrop()
+                    .resize(100, 100)
+                    .error(R.drawable.man)
+                    .into(imageView);
+        }else {
+            Picasso.with(this.activity)
+                    .load(Server.URS_GET_IMAGEDEFAULT)
                     .centerCrop()
                     .resize(100, 100)
                     .error(R.drawable.man)

@@ -117,8 +117,14 @@ public class DetailAnggotaActivity extends AppCompatActivity {
                     email.setText(Email);
                     alamat.setText(Alamat);
                     telephone.setText(stringTelephone);
-                    Picasso.with(getApplication()).load(Gambar)
-                            .error(R.drawable.man).into(thumb_image);
+                    if (!Gambar.equals("")){
+                        Picasso.with(getApplication()).load(Gambar)
+                                .error(R.drawable.man).into(thumb_image);
+                    }else {
+                        Picasso.with(getApplication()).load(Server.URS_GET_IMAGEDEFAULT)
+                                .error(R.drawable.man).into(thumb_image);
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

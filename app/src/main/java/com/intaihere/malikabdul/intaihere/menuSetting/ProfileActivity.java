@@ -54,7 +54,7 @@ import static com.intaihere.malikabdul.intaihere.logReg.LoginActivity.session_st
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView tvSimpanFoto, tvUsername, tvEmail, tvTelephone, tvAlamat;
+    private TextView tvUsername, tvEmail, tvTelephone, tvAlamat;
     private CircleImageView civFotoProfile;
     private ImageView ivBtnUbahFoto;
     private Button btnUbahProfil;
@@ -91,7 +91,6 @@ public class ProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        tvSimpanFoto    = findViewById(R.id.tv_simpanfotoProfil);
         tvUsername      = findViewById(R.id.tv_usernameProfil);
         tvEmail         = findViewById(R.id.tv_emailProfil);
         tvTelephone     = findViewById(R.id.tv_telephoneProfil);
@@ -100,17 +99,13 @@ public class ProfileActivity extends AppCompatActivity {
         ivBtnUbahFoto   = findViewById(R.id.iv_btnFoto);
         btnUbahProfil   = findViewById(R.id.btn_ubahProfil);
 
+        fotoProfile();
+
         ivBtnUbahFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage();
-            }
-        });
-
-        tvSimpanFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage();
+                Intent intent = new Intent(ProfileActivity.this, UploadFotoActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -122,11 +117,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
-        String image    = (sharedpreferences.getString("image", ""));
-        if (!image.equals("")){
-            Picasso.with(getApplication()).load(image).error(R.drawable.man).into(civFotoProfile);
-        }
     }
 
     //button back toolbar
@@ -145,7 +135,7 @@ public class ProfileActivity extends AppCompatActivity {
         String email    = (sharedpreferences.getString("email", ""));
         String telephone = (sharedpreferences.getString("telephone",""));
         String alamat   = (sharedpreferences.getString("alamat", ""));
-        String image    = (sharedpreferences.getString("image", ""));
+//        String image    = (sharedpreferences.getString("image", ""));
 
         tvUsername.setText(username);
         tvAlamat.setText(alamat);
@@ -154,185 +144,47 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    public String getStringImage(Bitmap bmp) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, bitmap_size, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
 
-    private void uploadImage() {
-        //getting the current user
+    private void fotoProfile(){
         sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
         final String id = (sharedpreferences.getString("id", ""));
+        String url_fotoProfile = Server.URL_DATA_BY + id;
 
-        final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Menunggu...", false, false);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.UPLOAD_FOTO_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e(TAG, "Response: " + response.toString());
-
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-//                            String image= jObj.getString(KEY_IMAGE);
-                            int success = jObj.getInt(TAG_SUCCESS);
-
-                            if (success == 1) {
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-                                editor.putBoolean(session_status, true);
-                                editor.putString("image", getStringImage(decoded));
-                                editor.commit();
-                                Log.e("v Add", jObj.toString());
-                                Toast.makeText(ProfileActivity.this, jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
-
-                            } else {
-                                Toast.makeText(ProfileActivity.this, jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        //menghilangkan progress dialog
-                        loading.dismiss();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //menghilangkan progress dialog
-                        loading.dismiss();
-
-                        //menampilkan toast
-                        Toast.makeText(ProfileActivity.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
-                        Log.e(TAG, error.getMessage().toString());
-                    }
-                }) {
+        StringRequest request = new StringRequest(Request.Method.GET, url_fotoProfile, new Response.Listener<String>() {
             @Override
-            protected Map<String, String> getParams() {
-                //membuat parameters
-                Map<String, String> params = new HashMap<String, String>();
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    String FotoProfile = object.getString("image");
+                    if (!FotoProfile.equals("")){
+                        Picasso.with(getApplication())
+                                .load(FotoProfile)
+                                .centerCrop()
+                                .resize(80,80)
+                                .placeholder(R.drawable.man)
+                                .into(civFotoProfile);
+                    }else {
+                        Picasso.with(getApplication()).load(Server.URS_GET_IMAGEDEFAULT)
+                                .centerCrop()
+                                .resize(50, 50)
+                                .error(R.drawable.man).into(civFotoProfile);
+                    }
 
-                //menambah parameter yang di kirim ke web servis
-                params.put(KEY_IMAGE, getStringImage(decoded));
-                params.put("id", id);
 
-                //kembali ke parameters
-                Log.e(TAG, "" + params);
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
-    private void selectImage() {
-        civFotoProfile.setImageResource(0);
-        final CharSequence[] items = {"Ambil Camera", "Pilih dari dokumen",
-                "Cancel"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
-        builder.setTitle("Tambahkan Gambar!");
-        builder.setIcon(R.drawable.ic_camerareds);
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Ambil Camera")) {
-                    intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    fileUri = getOutputMediaFileUri();
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, fileUri);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[item].equals("Pilih dari dokumen")) {
-                    intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Gambar dipilih"), SELECT_FILE);
-                } else if (items[item].equals("Kembali")) {
-                    dialog.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
             }
         });
-        builder.show();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
     }
 
-    public Uri getOutputMediaFileUri() {
-        return Uri.fromFile(getOutputMediaFile());
-    }
-
-    private static File getOutputMediaFile() {
-
-        // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "TrackingEye");
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.e("Monitoring", "Oops! Failed create Monitoring directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_TrackingEye_" + timeStamp + ".jpg");
-
-        return mediaFile;
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("onActivityResult", "requestCode " + requestCode + ", resultCode " + resultCode);
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CAMERA) {
-                try {
-                    Log.e("CAMERA", fileUri.getPath());
-
-                    bitmap = BitmapFactory.decodeFile(fileUri.getPath());
-                    setToImageView(getResizedBitmap(bitmap, max_resolution_image));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
-                try {
-                    // mengambil gambar dari Gallery
-                    bitmap = MediaStore.Images.Media.getBitmap(ProfileActivity.this.getContentResolver(), data.getData());
-                    setToImageView(getResizedBitmap(bitmap, max_resolution_image));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
-    private void setToImageView(Bitmap bmp) {
-        //compress image
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, bitmap_size, bytes);
-        decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes.toByteArray()));
-
-        //menampilkan gambar yang dipilih dari camera/gallery ke ImageView
-        civFotoProfile.setImageBitmap(decoded);
-        tvSimpanFoto.setVisibility(View.VISIBLE);
-    }
-
-    // fungsi resize image
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
 
 
 }

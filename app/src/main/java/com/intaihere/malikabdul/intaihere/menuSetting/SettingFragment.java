@@ -81,6 +81,8 @@ public class SettingFragment extends Fragment {
 
         if (!image.equals("")){
             Picasso.with(getContext()).load(image).error(R.drawable.man).into(civFotoSetting);
+        }else {
+            Picasso.with(getContext()).load(Server.URS_GET_IMAGEDEFAULT).error(R.drawable.man).into(civFotoSetting);
         }
 
 

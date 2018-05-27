@@ -162,11 +162,22 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
         final String
                 dateNow = dateFormat.format(date);
         StringRequest request = new StringRequest(Request.Method.POST, url_inputTask, new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
-                progressDialog.dismiss();
-                finishAndRemoveTask();
+                Log.e(TAG, "Response: " + response.toString());
 
+                try {
+                    JSONObject object = new JSONObject(response);
+                    String msg = object.getString("message");
+                    Log.d(TAG, "onResponsebuatstatus: "+msg);
+
+                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                progressDialog.dismiss();
+                finish();
             }
         }, new Response.ErrorListener() {
             @Override

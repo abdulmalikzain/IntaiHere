@@ -21,15 +21,6 @@
         android:orientation="vertical"
         android:background="@color/colorPrimary">
 
-        <TextView
-            android:id="@+id/tv_simpanfotoProfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Simpan Foto"
-            android:textColor="@color/colorWhite"
-            android:layout_gravity="right"
-            android:layout_margin="10dp"
-            android:visibility="invisible"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_fotoProfil"

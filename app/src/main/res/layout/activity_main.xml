@@ -114,7 +114,7 @@
             app:menu_labels_singleLine="true"
             app:menu_colorNormal="@color/colorWhite"
             app:menu_backgroundColor="#ccffffff"
-            app:menu_fab_label="Menu label">
+            app:menu_fab_label="Marker">
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab2"
