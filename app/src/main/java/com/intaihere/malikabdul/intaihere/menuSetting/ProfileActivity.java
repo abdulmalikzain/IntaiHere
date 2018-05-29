@@ -156,19 +156,13 @@ public class ProfileActivity extends AppCompatActivity {
                 try {
                     JSONObject object = new JSONObject(response);
                     String FotoProfile = object.getString("image");
-                    if (!FotoProfile.equals("")){
                         Picasso.with(getApplication())
                                 .load(FotoProfile)
                                 .centerCrop()
-                                .resize(80,80)
+                                .resize(100,100)
                                 .placeholder(R.drawable.man)
                                 .into(civFotoProfile);
-                    }else {
-                        Picasso.with(getApplication()).load(Server.URS_GET_IMAGEDEFAULT)
-                                .centerCrop()
-                                .resize(50, 50)
-                                .error(R.drawable.man).into(civFotoProfile);
-                    }
+
 
 
                 } catch (JSONException e) {

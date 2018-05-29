@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mMap.clear();
                 fab3.setEnabled(false);
                 Toast.makeText(MainActivity.this, "Marker dihapus", Toast.LENGTH_SHORT).show();
             }
@@ -295,6 +295,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
+            finishAffinity();
             return;
         }
 

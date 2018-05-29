@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etUsername, etEmail, etPassword, etTelephone;
     private TextView tvBtnRegister ;
     private Button btnLoginreg;
-    private String image = Server.URS_GET_IMAGEDEFAULT;
+
 
     SharedPreferences sharedPreferences;
 
@@ -66,29 +67,30 @@ public class RegisterActivity extends AppCompatActivity {
         final String email = etEmail.getText().toString().trim();
         final String password = etPassword.getText().toString().trim();
         final String telephone = etTelephone.getText().toString().trim();
+        final String image = Server.URS_GET_IMAGEDEFAULT;
 
         //first we will do the validations
 
         if (TextUtils.isEmpty(username)) {
-            etUsername.setError("Please enter username");
+            etUsername.setError("nama pengguna tidak boleh kosong");
             etUsername.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(email)) {
-            etEmail.setError("Please enter your email");
+            etEmail.setError("email tidak boleh kosong");
             etEmail.requestFocus();
             return;
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Enter a valid email");
+            etEmail.setError("email tidak valid");
             etEmail.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            etPassword.setError("Enter a password");
+            etPassword.setError("masukkan password");
             etPassword.requestFocus();
             return;
         }
@@ -111,6 +113,8 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("password", password);
                 params.put("telephone", telephone);
                 params.put("image", image);
+
+                Log.d("coba image", "doInBackground: "+image);
 
                 //returing the response
                 return requestHandler.sendPostRequest(Server.URL_REGISTER, params);

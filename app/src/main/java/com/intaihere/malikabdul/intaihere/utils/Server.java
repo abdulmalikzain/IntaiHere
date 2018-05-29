@@ -20,5 +20,7 @@ public class Server {
 
     public static String URS_GET_MARKERS = "http://trackingeye.000webhostapp.com/trackingeye/GetMarkers.php";
 
-    public static String URS_GET_IMAGEDEFAULT = "http://trackingeye.000webhostapp.com/trackingeye/images/fotodefault.png";
+    public static String URS_GET_IMAGEDEFAULT = "http://trackingeye.000webhostapp.com/trackingeye/images/fotoNotFound.png";
+
+    public static final String URL_DELETE_STATUS = "http://trackingeye.000webhostapp.com/trackingeye/delete_status.php";
 }

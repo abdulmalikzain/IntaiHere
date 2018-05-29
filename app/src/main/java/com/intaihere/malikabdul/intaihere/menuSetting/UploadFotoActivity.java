@@ -234,7 +234,7 @@ public class UploadFotoActivity extends AppCompatActivity {
     private static File getOutputMediaFile() {
 
         // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "TrackingEye");
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "IntaiHere");
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
@@ -309,7 +309,7 @@ public class UploadFotoActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
         final String id = (sharedpreferences.getString("id", ""));
         String url_fotoProfile = Server.URL_DATA_BY + id;
-        final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Menunggu...",
+        final ProgressDialog loading = ProgressDialog.show(this, "Simpan...", "Menunggu...",
                 false, false);
 
         StringRequest request = new StringRequest(Request.Method.GET, url_fotoProfile, new Response.Listener<String>() {
@@ -325,10 +325,8 @@ public class UploadFotoActivity extends AppCompatActivity {
                     editor.commit();
 
                     loading.dismiss();
-
-                    Intent intent = new Intent(UploadFotoActivity.this, SettingFragment.class);
-                    startActivity(intent);
-
+                    Toast.makeText(UploadFotoActivity.this, "Foto berhasil diubah", Toast.LENGTH_SHORT).show();
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     loading.dismiss();

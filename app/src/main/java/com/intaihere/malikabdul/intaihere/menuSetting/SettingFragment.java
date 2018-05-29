@@ -78,12 +78,8 @@ public class SettingFragment extends Fragment {
 
         sharedPreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
         String image = (sharedPreferences.getString("image", ""));
+        Picasso.with(getContext()).load(image).centerCrop().resize(100, 100).error(R.drawable.man).into(civFotoSetting);
 
-        if (!image.equals("")){
-            Picasso.with(getContext()).load(image).error(R.drawable.man).into(civFotoSetting);
-        }else {
-            Picasso.with(getContext()).load(Server.URS_GET_IMAGEDEFAULT).error(R.drawable.man).into(civFotoSetting);
-        }
 
 
         SettingAdapter listAdapter = new

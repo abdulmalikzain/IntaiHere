@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -49,6 +50,7 @@ public class StatusFragment extends Fragment {
     private List<ModelStatus> modelTasks;
 
     private SharedPreferences sharedpreferences;
+    private String urlRemoveStatus = Server.URL_DELETE_STATUS;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +69,8 @@ public class StatusFragment extends Fragment {
 
         tampilStatus();
 
+        deleteStatus();
+
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,14 +82,7 @@ public class StatusFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
         final String image = (sharedPreferences.getString("image", ""));
-        if (!image.equals("")){
-            Picasso.with(getContext()).load(image).error(R.drawable.man).into(ivFotoProfile);
-        }else {
-            Picasso.with(getContext()).load(Server.URS_GET_IMAGEDEFAULT)
-                    .centerCrop()
-                    .resize(50,50)
-                    .error(R.drawable.man).into(ivFotoProfile);
-        }
+            Picasso.with(getContext()).load(image).centerCrop().resize(100,100).error(R.drawable.man).into(ivFotoProfile);
 
 
         return view;
@@ -146,21 +143,21 @@ public class StatusFragment extends Fragment {
             long hari  = TimeUnit.MILLISECONDS.toDays(dateDiff);
 
             if (detik < 60) {
-                convTime = detik+ "detik lalu";
+                convTime = detik + " detik lalu";
             } else if (menit < 60) {
-                convTime = menit+ "menit lalu";
+                convTime = menit + " menit lalu";
             } else if (jam < 24) {
-                convTime = jam+ "jam lalu";
+                convTime = jam + " jam lalu";
             } else if (hari >= 7) {
                 if (hari > 30) {
-                    convTime = (hari / 30)+ "bulan lalu";
+                    convTime = (hari / 30) + " bulan lalu";
                 } else if (hari > 360) {
-                    convTime = (hari / 360)+ "tahun lalu";
+                    convTime = (hari / 360) + " tahun lalu";
                 } else {
-                    convTime = (hari / 7) + "minggu lalu";
+                    convTime = (hari / 7) + " minggu lalu";
                 }
             } else if (hari < 7) {
-                convTime = hari+ "hari lalu";
+                convTime = hari + " hari lalu";
             }
 
             final ModelStatus modelTask = new ModelStatus();
@@ -183,6 +180,35 @@ public class StatusFragment extends Fragment {
 
         return convTime;
 
+    }
+
+    private void deleteStatus(){
+        StringRequest strReq = new StringRequest(Request.Method.GET, urlRemoveStatus, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d("Response: ", response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error: ", error.getMessage());
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(strReq);
     }
 
 }

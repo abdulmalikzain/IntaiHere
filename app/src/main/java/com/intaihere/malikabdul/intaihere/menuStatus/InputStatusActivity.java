@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -172,11 +173,13 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
                     String msg = object.getString("message");
                     Log.d(TAG, "onResponsebuatstatus: "+msg);
 
+                    Toast.makeText(InputStatusActivity.this, "Status berhasil dibuat", Toast.LENGTH_SHORT).show();
                     finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 progressDialog.dismiss();
+                Toast.makeText(InputStatusActivity.this, "Status berhasil dibuat", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }, new Response.ErrorListener() {
@@ -228,7 +231,7 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
     private static File getOutputMediaFile() {
 
         // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "TrackingEye");
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "IntaiHere");
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {

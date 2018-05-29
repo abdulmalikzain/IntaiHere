@@ -66,7 +66,6 @@ public class DetailAnggotaActivity extends AppCompatActivity {
 
 
         id_news = getIntent().getStringExtra("id");
-        Log.d(TAG, "ssssss: "+titleNama);
 
         collapsingToolbar = findViewById(R.id.collapsing_toolbar);
 
@@ -117,13 +116,8 @@ public class DetailAnggotaActivity extends AppCompatActivity {
                     email.setText(Email);
                     alamat.setText(Alamat);
                     telephone.setText(stringTelephone);
-                    if (!Gambar.equals("")){
-                        Picasso.with(getApplication()).load(Gambar)
-                                .error(R.drawable.man).into(thumb_image);
-                    }else {
-                        Picasso.with(getApplication()).load(Server.URS_GET_IMAGEDEFAULT)
-                                .error(R.drawable.man).into(thumb_image);
-                    }
+                    Picasso.with(getApplication()).load(Gambar)
+                            .error(R.drawable.man).into(thumb_image);
 
 
                 } catch (JSONException e) {
