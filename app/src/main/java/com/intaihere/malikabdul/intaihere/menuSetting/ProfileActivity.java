@@ -1,28 +1,17 @@
 package com.intaihere.malikabdul.intaihere.menuSetting;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,20 +26,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.intaihere.malikabdul.intaihere.logReg.LoginActivity.my_shared_preferences;
-import static com.intaihere.malikabdul.intaihere.logReg.LoginActivity.session_status;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -162,8 +140,6 @@ public class ProfileActivity extends AppCompatActivity {
                                 .resize(100,100)
                                 .placeholder(R.drawable.man)
                                 .into(civFotoProfile);
-
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -11,10 +11,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="30dp">
 
             <ImageView
-                android:layout_marginTop="60dp"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -24,17 +24,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Version 1.0"
+                android:text="@string/versi"
                 android:textColor="#666666"/>
             <TextView
                 android:layout_marginTop="10dp"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:textSize="10pt"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:text="@string/tv_ket_tentang"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tentang1"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textSize="10pt"
+                android:layout_marginTop="10dp"/>
 
         </LinearLayout>
     </ScrollView>

@@ -15,6 +15,10 @@
         android:icon="@drawable/ic_grup"
         android:title="Anggota" />
     <item
+        android:id="@+id/navigation_riwayat"
+        android:icon="@drawable/ic_personpin"
+        android:title="Riwayat" />
+    <item
         android:id="@+id/navigation_setting"
         android:icon="@drawable/ic_setting"
         android:title="Pengaturan" />

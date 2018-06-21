@@ -125,7 +125,7 @@ public class StatusFragment extends Fragment {
         requestQueue.add(requestTampil);
     }
 
-    public String covertTimeToText(String dataDate, String Nama, String status, String tujuan, String foto_status) {
+    private String covertTimeToText(String dataDate, String Nama, String status, String tujuan, String foto_status) {
 
         String convTime = null;
 

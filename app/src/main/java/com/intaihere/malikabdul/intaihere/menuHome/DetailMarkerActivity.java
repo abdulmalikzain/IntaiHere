@@ -2,7 +2,9 @@ package com.intaihere.malikabdul.intaihere.menuHome;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -27,6 +29,13 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -44,10 +53,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.intaihere.malikabdul.intaihere.R;
+import com.intaihere.malikabdul.intaihere.utils.Server;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
+import static com.intaihere.malikabdul.intaihere.logReg.LoginActivity.my_shared_preferences;
 
 public class DetailMarkerActivity extends AppCompatActivity implements OnMapReadyCallback {
     private TextView tvPosisiTujuan, tvHasilDir;
@@ -55,15 +72,14 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
     private LatLng latLngPosisi;
     private LatLng latLngTujuanMobil;
     private LatLng latLngTujuanBike;
+    private ProgressDialog progressDialog;
     private Toolbar mActionToolbar;
-    private FloatingActionButton fabDirCar, fabDirWalk, fabDirBike, fabSms, fabPhone;
+    private FloatingActionButton fabDirCar, fabDirWalk, fabDirBike, fabSms, fabPhone, fabDmRiwayat;
     private GoogleMap googleMap;
-    private String serverKey = "AIzaSyB4t-S7drZDkkmiYDTFy2bc0w1BZ2SZel4";
+    private String serverKey = "AIzaSyBpmvzj6M8tfy9-VrD80oq70qmRbC4lb2Q";
     private String[] colors = {"#FF3F51B5", "#FF2E2F33", "#FF7B7B7C"};
-    private String telephone, username;
-
-    private GoogleApiClient googleApiClient;
-    private LocationRequest request;
+    private String telephone, username, alamat, id;
+    private SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +93,22 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
         fabSms          = findViewById(R.id.fab_dm_sms);
         fabPhone        = findViewById(R.id.fab_dm_phone);
         tvHasilDir      = findViewById(R.id.tv_hasil_dir);
+        fabDmRiwayat    = findViewById(R.id.fab_dm_riwayat);
 
         Intent intent = this.getIntent();
         String lat =intent.getExtras().getString("TAG_LATITUDE");
         String lng =intent.getExtras().getString("TAG_LONGITUDE");
         username = intent.getExtras().getString("username");
         telephone = intent.getExtras().getString("telephone");
+        alamat = intent.getExtras().getString("alamat");
+        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
+        id = (sharedpreferences.getString("id", ""));
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.maps_detail_marker);
         mapFragment.getMapAsync(this);
 
-        latLngTujuan = new LatLng(Double.parseDouble(lat),Double.parseDouble(lng));
+        latLngTujuan        = new LatLng(Double.parseDouble(lat),Double.parseDouble(lng));
         latLngTujuanBike    = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
         latLngTujuanMobil   = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
@@ -134,6 +154,13 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onClick(View v) {
                 kirimSms();
+            }
+        });
+
+        fabDmRiwayat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rekamPosisi();
             }
         });
     }
@@ -340,6 +367,51 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
     private void kirimSms(){
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", telephone,
                 null)));
+    }
+
+
+    private void rekamPosisi(){
+
+        long date = System.currentTimeMillis();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        final String dateNow = dateFormat.format(date);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Menyimpan posisi...");
+        progressDialog.show();
+        RequestQueue queue = Volley.newRequestQueue(getApplication());
+        StringRequest sr = new StringRequest(Request.Method.POST,Server.URL_INSERT_REKAM, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    String msg = object.getString("message");
+                    progressDialog.dismiss();
+                    Log.d(TAG, "nnnnnn: "+alamat);
+                    Toast.makeText(DetailMarkerActivity.this, msg, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("id_user", id);
+                params.put("username", username);
+                params.put("waktu", dateNow);
+                params.put("alamat", alamat);
+
+                return params;
+            }
+
+        };
+        queue.add(sr);
     }
 
 }

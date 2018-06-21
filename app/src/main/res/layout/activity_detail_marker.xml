@@ -142,7 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="6dp"
-            android:layout_marginRight="80dp"
+            android:layout_marginRight="150dp"
             android:layout_alignParentRight="true"
             app:menu_labels_ellipsize="end"
             app:menu_labels_singleLine="true"
@@ -158,7 +158,7 @@
                 android:src="@drawable/ic_phone"
                 app:fab_size="mini"
                 app:fab_colorNormal="@color/colorWhite"
-                app:fab_label="telepone" />
+                app:fab_label="telepon" />
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_dm_sms"
                 android:layout_width="wrap_content"
@@ -167,6 +167,29 @@
                 app:fab_size="mini"
                 app:fab_colorNormal="@color/colorWhite"
                 app:fab_label="SMS" />
+
+        </com.github.clans.fab.FloatingActionMenu>
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            android:layout_marginRight="60dp"
+            android:layout_alignParentRight="true"
+            app:menu_labels_ellipsize="end"
+            app:menu_labels_singleLine="true"
+            app:menu_fab_size="mini"
+            app:menu_icon="@drawable/ic_personpin"
+            app:menu_colorNormal="@color/colorWhite"
+            app:menu_openDirection="down">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_dm_riwayat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_size="mini"
+                app:fab_colorNormal="@color/colorWhite"
+                app:fab_label="rekam posisi" />
 
         </com.github.clans.fab.FloatingActionMenu>
 

@@ -160,8 +160,8 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
 
         long date = System.currentTimeMillis();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        final String
-                dateNow = dateFormat.format(date);
+        final String dateNow = dateFormat.format(date);
+
         StringRequest request = new StringRequest(Request.Method.POST, url_inputTask, new Response.Listener<String>() {
 
             @Override
@@ -186,6 +186,7 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
+                Toast.makeText(InputStatusActivity.this, "Status gagal dibual", Toast.LENGTH_SHORT).show();
             }
         }){
             @Override

@@ -23,4 +23,9 @@ public class Server {
     public static String URS_GET_IMAGEDEFAULT = "http://trackingeye.000webhostapp.com/trackingeye/images/fotoNotFound.png";
 
     public static final String URL_DELETE_STATUS = "http://trackingeye.000webhostapp.com/trackingeye/delete_status.php";
+
+    public static final String URL_INSERT_REKAM = "http://trackingeye.000webhostapp.com/trackingeye/rekam_posisi/insert.php";
+
+    public static final String URL_GET_REKAM = "http://trackingeye.000webhostapp.com/trackingeye/rekam_posisi/get.php?id_user=";
+
 }

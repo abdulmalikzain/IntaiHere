@@ -72,6 +72,7 @@ import com.intaihere.malikabdul.intaihere.adapter.PlaceAutocompleteAdapter;
 import com.intaihere.malikabdul.intaihere.menuGrup.GrupFragment;
 import com.intaihere.malikabdul.intaihere.menuHome.DetailMarkerActivity;
 import com.intaihere.malikabdul.intaihere.menuHome.HomeFragment;
+import com.intaihere.malikabdul.intaihere.menuRiwayat.RiwayatFragment;
 import com.intaihere.malikabdul.intaihere.menuSetting.SettingFragment;
 import com.intaihere.malikabdul.intaihere.menuStatus.StatusFragment;
 import com.intaihere.malikabdul.intaihere.model.InfoWindowData;
@@ -266,6 +267,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 case R.id.navigation_grup:
                     transaction.replace(R.id.fragment_container, new GrupFragment()).commit();
+                    relativeLayout.setVisibility(View.GONE);
+                    frameLayout.setVisibility(View.VISIBLE);
+                    return true;
+
+                case R.id.navigation_riwayat:
+                    transaction.replace(R.id.fragment_container, new RiwayatFragment()).commit();
                     relativeLayout.setVisibility(View.GONE);
                     frameLayout.setVisibility(View.VISIBLE);
                     return true;
@@ -671,7 +678,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (addresses != null && addresses.size() > 0) {
 
                 String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                InfoWindowData info = new InfoWindowData();
+                final InfoWindowData info = new InfoWindowData();
                 info.setAlamat(address);
                 info.setLatitude(LATITUDE);
                 info.setLongitude(LONGITUDE);
@@ -698,6 +705,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent.putExtra("TAG_LONGITUDE", Double.toString(lng));
                         intent.putExtra("username", marker.getTitle());
                         intent.putExtra("telephone", marker.getSnippet());
+                        InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
+                        intent.putExtra("alamat", infoWindowData.getAlamat());
+                        Log.d(TAG, "gettaggggg: "+infoWindowData.getAlamat());
 
                         startActivity(intent);
                     }

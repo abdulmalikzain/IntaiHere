@@ -38,8 +38,7 @@
                     android:id="@+id/tv_rv_statuswaktu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="waktu"
-                    android:textSize="6pt"/>
+                    android:text="waktu"/>
                 <TextView
                     android:visibility="invisible"
                     android:id="@+id/tv_rv_StatusStatus"
