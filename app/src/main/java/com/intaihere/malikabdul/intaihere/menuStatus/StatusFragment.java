@@ -69,7 +69,7 @@ public class StatusFragment extends Fragment {
 
         tampilStatus();
 
-        deleteStatus();
+//        deleteStatus();
 
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override

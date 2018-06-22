@@ -148,7 +148,6 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
 
     ///////////////////////
     private void inputTask(){
-        String url_inputTask = Server.URL_INPUT_TASK;
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Mengirim status...");
         progressDialog.show();
@@ -162,50 +161,46 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final String dateNow = dateFormat.format(date);
 
-        StringRequest request = new StringRequest(Request.Method.POST, url_inputTask, new Response.Listener<String>() {
-
+        StringRequest sr = new StringRequest(Request.Method.POST,Server.URL_INPUT_TASK, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e(TAG, "Response: " + response.toString());
-
                 try {
                     JSONObject object = new JSONObject(response);
                     String msg = object.getString("message");
-                    Log.d(TAG, "onResponsebuatstatus: "+msg);
+                    Log.d(TAG, "nanana: "+msg);
+                    progressDialog.dismiss();
 
-                    Toast.makeText(InputStatusActivity.this, "Status berhasil dibuat", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InputStatusActivity.this, msg, Toast.LENGTH_SHORT).show();
                     finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                progressDialog.dismiss();
-                Toast.makeText(InputStatusActivity.this, "Status berhasil dibuat", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InputStatusActivity.this, "status berhasil dibuat", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                Toast.makeText(InputStatusActivity.this, "Status gagal dibual", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InputStatusActivity.this, "gagal buat status", Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
                 params.put("id_users", idx);
                 params.put("username", username);
                 params.put("tujuan", lokasi);
                 params.put("waktu", dateNow);
                 params.put("status", status);
                 params.put("foto_status", getStringImage(decoded));
-//                params.put("image", image);
 
                 return params;
             }
-        };
 
+        };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(request);
+        requestQueue.add(sr);
     }
 
     //////////////////////////////IMAGE

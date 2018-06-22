@@ -16,11 +16,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
 import com.intaihere.malikabdul.intaihere.R;
 import com.intaihere.malikabdul.intaihere.adapter.RiwayatAdapter;
 import com.intaihere.malikabdul.intaihere.model.ModelRiwayat;
 import com.intaihere.malikabdul.intaihere.utils.Server;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,19 +71,26 @@ public class RiwayatFragment extends Fragment {
             public void onResponse(String response) {
                 try {
                     JSONObject object = new JSONObject(response);
-                    String username = object.getString("username");
-                    String waktu = object.getString("waktu");
-                    String alamat = object.getString("alamat");
+                    String getObject = object.getString("rekam");
+                    JSONArray jsonArray = new JSONArray(getObject);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String username = jsonObject.getString("username");
+                        String waktu    = jsonObject.getString("waktu");
+                        String alamat   = jsonObject.getString("alamat");
 
-                    final ModelRiwayat modelTask = new ModelRiwayat();
-                    modelTask.setWaktu(waktu);
-                    modelTask.setUsername(username);
-                    modelTask.setAlamat(alamat);
-                    modelRiwayats.add(modelTask);
 
-                    //creating adapter object and setting it to recyclerview
-                    RiwayatAdapter adapter = new RiwayatAdapter(getContext(), modelRiwayats);
-                    recyclerView.setAdapter(adapter);
+                        final ModelRiwayat modelTask = new ModelRiwayat();
+                        modelTask.setWaktu(waktu);
+                        modelTask.setUsername(username);
+                        modelTask.setAlamat(alamat);
+                        modelRiwayats.add(modelTask);
+
+                        //creating adapter object and setting it to recyclerview
+                        RiwayatAdapter adapter = new RiwayatAdapter(getContext(), modelRiwayats);
+                        recyclerView.setAdapter(adapter);
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
