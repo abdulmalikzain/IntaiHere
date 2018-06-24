@@ -387,7 +387,6 @@ public class DetailMarkerActivity extends AppCompatActivity implements OnMapRead
                     JSONObject object = new JSONObject(response);
                     String msg = object.getString("message");
                     progressDialog.dismiss();
-                    Log.d(TAG, "nnnnnn: "+alamat);
                     Toast.makeText(DetailMarkerActivity.this, msg, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();

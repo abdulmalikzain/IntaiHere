@@ -95,7 +95,7 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
     private static final String TAG = "InputStatus";
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136));
-
+    private String dateNow, idx, username, status, lokasi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +136,14 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
         });
 
         init();
+
+        long date = System.currentTimeMillis();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateNow = dateFormat.format(date);
+        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
+        idx = (sharedpreferences.getString("id", ""));
+        username = (sharedpreferences.getString("username", ""));
+
     }
 
     //button back toolbar
@@ -148,18 +156,11 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
 
     ///////////////////////
     private void inputTask(){
+        lokasi = actInputAlamat.getText().toString();
+        status = etStatus.getText().toString();
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Mengirim status...");
+        progressDialog.setMessage("Membuat status...");
         progressDialog.show();
-        sharedpreferences = getSharedPreferences(my_shared_preferences, MODE_PRIVATE);
-        final String idx = (sharedpreferences.getString("id", ""));
-        final String username = (sharedpreferences.getString("username", ""));
-        final String lokasi = actInputAlamat.getText().toString();
-        final String status = etStatus.getText().toString();
-
-        long date = System.currentTimeMillis();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        final String dateNow = dateFormat.format(date);
 
         StringRequest sr = new StringRequest(Request.Method.POST,Server.URL_INPUT_TASK, new Response.Listener<String>() {
             @Override
@@ -167,22 +168,22 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
                 try {
                     JSONObject object = new JSONObject(response);
                     String msg = object.getString("message");
-                    Log.d(TAG, "nanana: "+msg);
                     progressDialog.dismiss();
 
-                    Toast.makeText(InputStatusActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InputStatusActivity.this, "status berhasil dibuat", Toast.LENGTH_SHORT).show();
                     finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(InputStatusActivity.this, "status berhasil dibuat", Toast.LENGTH_SHORT).show();
-                finish();
+//                Toast.makeText(InputStatusActivity.this, "status berhasil dibuat", Toast.LENGTH_SHORT).show();
+//                finish();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                Toast.makeText(InputStatusActivity.this, "gagal buat status", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InputStatusActivity.this, "sukses buat status", Toast.LENGTH_SHORT).show();
+
             }
         }){
             @Override
@@ -196,11 +197,12 @@ public class InputStatusActivity extends AppCompatActivity implements GoogleApiC
                 params.put("foto_status", getStringImage(decoded));
 
                 return params;
+
             }
 
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(sr);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(sr);
     }
 
     //////////////////////////////IMAGE

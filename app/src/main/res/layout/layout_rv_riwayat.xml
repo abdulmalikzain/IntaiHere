@@ -16,13 +16,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Username"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:textStyle="bold"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat"
             android:layout_weight="2"/>
 
         <TextView
             android:id="@+id/tv_riwayat_waktu"
             android:layout_weight="2"
             android:gravity="right"
+            android:textColor="@color/colorToska"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="waktu"/>

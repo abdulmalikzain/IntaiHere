@@ -51,6 +51,7 @@ public class StatusFragment extends Fragment {
 
     private SharedPreferences sharedpreferences;
     private String urlRemoveStatus = Server.URL_DELETE_STATUS;
+    private String convTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,8 +69,6 @@ public class StatusFragment extends Fragment {
         modelTasks = new ArrayList<>();
 
         tampilStatus();
-
-//        deleteStatus();
 
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +126,7 @@ public class StatusFragment extends Fragment {
 
     private String covertTimeToText(String dataDate, String Nama, String status, String tujuan, String foto_status) {
 
-        String convTime = null;
+        convTime = null;
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -158,6 +157,10 @@ public class StatusFragment extends Fragment {
                 }
             } else if (hari < 7) {
                 convTime = hari + " hari lalu";
+            }
+
+            if (convTime.equals("2 hari lalu")){
+                deleteStatus();
             }
 
             final ModelStatus modelTask = new ModelStatus();
