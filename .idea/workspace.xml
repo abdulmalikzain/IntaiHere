@@ -10,20 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="872b3858-0108-438f-a146-84ee76b3ad7c" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_persooutline.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-mdpi/ic_persooutline.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/ic_persooutline.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_persooutline.png" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/posdirp.png" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuHome/DetailMarkerActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuHome/DetailMarkerActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuStatus/InputStatusActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuStatus/InputStatusActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuStatus/StatusFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuStatus/StatusFragment.java" />
+      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/posdir.png" afterPath="" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_detail_marker.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_detail_marker.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_status.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_status.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_list_setting.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_list_setting.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_rv_riwayat.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_rv_riwayat.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_rv_status.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_rv_status.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/build/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -77,7 +68,7 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -2124,12 +2115,12 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_riwayat.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_list_setting.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_rv_status.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_detail_marker.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_rv_riwayat.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuHome/DetailMarkerActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_status.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuStatus/InputStatusActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/menuStatus/StatusFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_detail_marker.xml" />
       </list>
     </option>
   </component>
@@ -2154,6 +2145,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="ProjectPane" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -2164,30 +2158,32 @@
             <path>
               <item name="IntaiHere" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
             </path>
             <path>
               <item name="IntaiHere" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
-    <property name="sync.plugin.last.upgrade.timestamp" value="1529712564897" />
+    <property name="sync.plugin.last.upgrade.timestamp" value="1529831077538" />
     <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
     <property name="android.project.structure.last.selected" value="app" />
     <property name="android.project.structure.proportion" value="0.15" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res/drawable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -2381,9 +2377,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="10" y="20" width="1368" height="741" extended-state="6" />
+    <frame x="-1" y="0" width="1368" height="741" extended-state="6" />
     <layout>
-      <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2426,13 +2422,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/utils/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="125" lean-forward="false" selection-start-line="28" selection-start-column="125" selection-end-line="28" selection-end-column="125" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2325">
@@ -2444,7 +2433,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2550">
           <caret line="170" column="16" lean-forward="false" selection-start-line="170" selection-start-column="16" selection-end-line="179" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2452,7 +2440,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6555">
           <caret line="437" column="46" lean-forward="false" selection-start-line="437" selection-start-column="46" selection-end-line="437" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2474,7 +2461,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="900">
           <caret line="60" column="71" lean-forward="false" selection-start-line="60" selection-start-column="71" selection-end-line="60" selection-end-column="71" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2489,7 +2475,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="83" column="32" lean-forward="false" selection-start-line="83" selection-start-column="32" selection-end-line="83" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2511,7 +2496,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="83" column="32" lean-forward="false" selection-start-line="83" selection-start-column="32" selection-end-line="83" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2533,11 +2517,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="47" />
-          <folding>
-            <element signature="e#1044#1062#0" expanded="false" />
-            <element signature="e#1301#1326#0" expanded="false" />
-            <element signature="e#1433#1472#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-manifest">
@@ -2676,7 +2656,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="52" lean-forward="false" selection-start-line="7" selection-start-column="52" selection-end-line="7" selection-end-column="52" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2763,47 +2742,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="159">
           <caret line="660" column="11" lean-forward="true" selection-start-line="660" selection-start-column="11" selection-end-line="660" selection-end-column="11" />
-          <folding>
-            <element signature="method#setupBottomNavigationView#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onBackPressed#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#startTrackerService#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#initGoogleAPIClient#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#checkPermissions#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#requestLocationPermission#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#showSettingDialog#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onActivityResult#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onResume#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onDestroy#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onRequestPermissionsResult#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onMapReady#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onConnected#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onConnectionSuspended#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onConnectionFailed#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onLocationChanged#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#setupLocationManager#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#setInitialLocation#0;class#MainActivity#0" expanded="false" />
-            <element signature="e#27207#27496#0" expanded="false" />
-            <element signature="e#27495#27496#0" expanded="false" />
-            <element signature="method#getAddress#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#createCustomMarker#0;class#MainActivity#0" expanded="false" />
-            <element signature="e#31765#31818#0" expanded="false" />
-          </folding>
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_detail_marker.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="190" column="54" lean-forward="false" selection-start-line="190" selection-start-column="54" selection-end-line="190" selection-end-column="54" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/posdir.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_rv_riwayat.xml">
@@ -2820,7 +2759,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4500">
           <caret line="374" column="33" lean-forward="false" selection-start-line="374" selection-start-column="33" selection-end-line="374" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2848,7 +2786,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-585">
           <caret line="170" column="0" lean-forward="false" selection-start-line="170" selection-start-column="0" selection-end-line="170" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2856,16 +2793,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="168" column="27" lean-forward="false" selection-start-line="168" selection-start-column="27" selection-end-line="168" selection-end-column="27" />
-          <folding>
-            <element signature="e#2520#2828#0" expanded="true" />
-            <element signature="e#2827#2828#0" expanded="true" />
-            <element signature="e#3349#4411#0" expanded="true" />
-            <element signature="e#4410#4411#0" expanded="true" />
-            <element signature="e#6968#7386#0" expanded="true" />
-            <element signature="e#7385#7386#0" expanded="true" />
-            <element signature="e#7388#7672#0" expanded="true" />
-            <element signature="e#7671#7672#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/posdir.png" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_detail_marker.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/intaihere/malikabdul/intaihere/adapter/PlaceAutocompleteAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
